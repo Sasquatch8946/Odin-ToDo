@@ -2,3 +2,20 @@
     margin: 0;
     padding: 0;
 }
+
+.grid-container {
+    display: grid;
+    place-items: center;
+    margin: 1rem;
+    padding: 1rem;
+}
+
+.todos {
+    display: grid;
+    place-items: center;
+}
+
+.project-section {
+    display: grid;
+    place-items: center;
+}
