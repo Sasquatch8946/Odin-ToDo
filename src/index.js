@@ -1,31 +1,27 @@
 import "./styles.css";
-import { loadMenu } from "./loadMenu.js";
-import { loadHome } from "./loadHome.js";
-import { loadContact } from "./loadContact.js";
 
-// loadInitialContent();
-console.log("Hello, world!");
-const homeBtn = document.querySelector("nav>button:nth-child(1)");
-const menu = document.querySelector("nav>button:nth-child(2)");
-const contact = document.querySelector("nav>button:nth-child(3)");
-function clearContent() {
-    const contentDiv = document.querySelector("div#content");
-    contentDiv.removeChild(contentDiv.firstChild);
+class ToDo {
+	constructor(title,
+		description,
+		dueDate,
+		priority,
+		checklist,
+		notes
+	) {
+		this.title = title;
+		this.description = description;
+		this.dueDate = dueDate;
+		this.priority = priority;
+		this.checklist = checklist;
+		this.notes = notes;
+	}
 }
 
-document.addEventListener("DOMContentLoaded", loadHome);
+let myToDo = new ToDo("Clean the floors",
+	"Sweep and wetjet the floors in the kitche, living room, and entryway.",
+	"5/15/25",
+	"high",
+	"move the furniture, sweep, wetjet",
+	"be thorough");
 
-homeBtn.addEventListener("click", () => {
-    clearContent();
-    loadHome();
-});
 
-menu.addEventListener("click", () => {
-    clearContent();
-    loadMenu();
-});
-
-contact.addEventListener("click", () => {
-    clearContent();
-    loadContact();
-});
