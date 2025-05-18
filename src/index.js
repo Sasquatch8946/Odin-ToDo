@@ -22,20 +22,31 @@ const displayController = (function () {
 	const getContainer = () => {
 		return document.querySelector(".todos");
 	};
+	
+	const getSidebar = () => {
+		return document.querySelector(".sidebar");
+	}
 
 	const createProject = (projectName) => {
-		const container = getContainer();
+		const container = getSidebar();
 		const project = document.createElement("div");
-		project.innerText = projectName;
+		const projectTitle = document.createElement("button");
+		projectTitle.classList.add("project-title");
+		projectTitle.innerText = projectName;
+		project.appendChild(projectTitle);
 		project.classList.add("project-section");
-		project.dataset.project = projectName;
+		projectTitle.dataset.project = projectName;
 		container.appendChild(project);
+		projectTitle.focus();
 	}
 
 	const createTodoCard = (projectName, todo) => {
-		const container = document.querySelector(`.project-section[data-project=${projectName}`);
+		const container = getContainer();
+		const todoCard = document.createElement("div");
+		todoCard.classList.add("todo-card");
 		const cardTitle = document.createElement("div");
 		cardTitle.innerText = todo.title;
+		cardTitle.classList.add("title");
 		const cardDescription = document.createElement("div");
 		cardDescription.innerText = todo.description;
 		const cardDate = document.createElement("div");
@@ -46,11 +57,12 @@ const displayController = (function () {
 		cardChecklist.innerText = todo.checklist;
 		const cardNotes = document.createElement("div");
 		cardNotes.innerText = todo.notes;
-		container.appendChild(cardTitle);
-		container.appendChild(cardDescription);
-		container.appendChild(cardPriority);
-		container.appendChild(cardChecklist);
-		container.appendChild(cardNotes);
+		todoCard.appendChild(cardTitle);
+		todoCard.appendChild(cardDescription);
+		todoCard.appendChild(cardPriority);
+		todoCard.appendChild(cardChecklist);
+		todoCard.appendChild(cardNotes);
+		container.appendChild(todoCard);
 	}
 
 	return {
@@ -60,11 +72,11 @@ const displayController = (function () {
 })();
 
 let projects = {
-	today: []
+	Today: []
 }
 
 let myToDo = new ToDo("Clean the floors",
-	"Sweep and wetjet the floors in the kitche, living room, and entryway.",
+	"Sweep and wetjet the floors in the kitchen, living room, and entryway.",
 	"5/15/25",
 	"high",
 	"move the furniture, sweep, wetjet",
@@ -74,7 +86,7 @@ console.log(myToDo);
 
 console.log(typeof projects.today);
 
-projects.today.push(myToDo);
+projects.Today.push(myToDo);
 
 for (let project in projects) {
 	console.log(projects[project]);

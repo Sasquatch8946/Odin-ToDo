@@ -5,17 +5,64 @@
 
 .grid-container {
     display: grid;
-    place-items: center;
     margin: 1rem;
     padding: 1rem;
+    gap: 10px;
+    grid-template-columns: 1fr 10fr;
 }
 
 .todos {
     display: grid;
-    place-items: center;
+    grid-column: 2;
+}
+
+.new-todo {
+    grid-column: 2;
 }
 
 .project-section {
     display: grid;
-    place-items: center;
+    /* place-items: center;*/
+    row-gap: 10px;
+    width: 100%;
 }
+
+.project-title {
+    font-weight: bold;
+    font-size: 1rem;
+    align-self: start;
+    border: none;
+    background-color: lightgrey;
+    padding: 5px;
+}
+
+.project-title:focus {
+    background-color: firebrick;
+}
+
+.sidebar {
+    grid-column: 1;
+    background-color: lightgrey;
+    height: 100%;
+    width: 100%;
+    justify-items: center;
+    row-gap: 15px;
+    display: grid;
+    min-width: 200px;
+    min-height: 500px;
+    grid-template-rows: max-content 1fr;
+}
+
+.title {
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+.todo-card {
+    border: 2px solid black;
+    border-radius: 5px;
+    padding: 5px;
+    background-color: lightblue;
+    max-height: max-content;
+}
+
