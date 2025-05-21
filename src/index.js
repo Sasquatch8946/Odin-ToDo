@@ -14,6 +14,7 @@ class ToDo {
 		this.priority = priority;
 		this.checklist = checklist;
 		this.notes = notes;
+		this.id = crypto.randomUUID()
 	}
 }
 
@@ -51,10 +52,11 @@ const displayController = (function () {
 		const todoCard = document.createElement("div");
 		todoCard.classList.add("todo-card");
 		const cardTitle = document.createElement("div");
+		cardTitle.dataset.id = todo.id;
 		cardTitle.innerText = `${todo.title} (Due: ${todo.dueDate})`;
 		cardTitle.classList.add("title");
 		const hiddenContent = document.createElement("div");
-		hiddenContent.style.display = "none";
+		hiddenContent.classList.add("hidden");
 		const cardDescription = document.createElement("div");
 		cardDescription.innerText = todo.description;
 		const cardDate = document.createElement("div");
@@ -72,11 +74,18 @@ const displayController = (function () {
 		setPriorityHighlight(todo, todoCard);
 		todoCard.appendChild(hiddenContent);
 		container.appendChild(todoCard);
+		todoCard.addEventListener("click", (e) => {
+			const cn = Array.from(e.currentTarget.childNodes);
+			if (cn[1].classList[0] === "hidden") {
+				cn[1].classList.remove("hidden");
+			} else {
+				cn[1].classList.add("hidden");
+			}
+		});
 	}
 
 	const populateProjects = () => {
 		for (let project in projects) {
-			console.log(projects[project]);
 			displayController.createProject(project);
 			displayController.createTodoCard(project, projects[project][0]);
 		}

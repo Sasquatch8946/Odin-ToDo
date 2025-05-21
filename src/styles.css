@@ -86,3 +86,7 @@ dialog {
     grid-template-columns:  2fr 3fr;
 }
 
+.hidden {
+    display: none;
+}
+
