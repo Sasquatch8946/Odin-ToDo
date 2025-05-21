@@ -51,12 +51,13 @@ const displayController = (function () {
 		const todoCard = document.createElement("div");
 		todoCard.classList.add("todo-card");
 		const cardTitle = document.createElement("div");
-		cardTitle.innerText = todo.title;
+		cardTitle.innerText = `${todo.title} (Due: ${todo.dueDate})`;
 		cardTitle.classList.add("title");
+		const hiddenContent = document.createElement("div");
+		hiddenContent.style.display = "none";
 		const cardDescription = document.createElement("div");
 		cardDescription.innerText = todo.description;
 		const cardDate = document.createElement("div");
-		cardDate.innerText = todo.dueDate;
 		const cardPriority = document.createElement("div");
 		cardPriority.innerText = `Priority: ${todo.priority}`;
 		const cardChecklist = document.createElement("div");
@@ -64,11 +65,12 @@ const displayController = (function () {
 		const cardNotes = document.createElement("div");
 		cardNotes.innerText = todo.notes;
 		todoCard.appendChild(cardTitle);
-		todoCard.appendChild(cardDescription);
-		todoCard.appendChild(cardDate);
-		todoCard.appendChild(cardChecklist);
-		todoCard.appendChild(cardNotes);
+		hiddenContent.appendChild(cardDescription);
+		hiddenContent.appendChild(cardDate);
+		hiddenContent.appendChild(cardChecklist);
+		hiddenContent.appendChild(cardNotes);
 		setPriorityHighlight(todo, todoCard);
+		todoCard.appendChild(hiddenContent);
 		container.appendChild(todoCard);
 	}
 
