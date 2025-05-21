@@ -90,3 +90,7 @@ dialog {
     display: none;
 }
 
+.checklist {
+    padding-left: 1rem;
+}
+

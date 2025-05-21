@@ -80,8 +80,7 @@ const displayController = (function () {
 		cardDescription.innerText = todo.description;
 		const cardPriority = document.createElement("div");
 		cardPriority.innerText = `Priority: ${todo.priority}`;
-		const cardChecklist = document.createElement("div");
-		cardChecklist.innerText = todo.checklist;
+		const cardChecklist = createChecklist(todo);
 		const cardNotes = document.createElement("div");
 		cardNotes.innerText = todo.notes;
 		hiddenContent.appendChild(cardDescription);
@@ -107,6 +106,18 @@ const displayController = (function () {
 			displayController.createTodoCard(projects[project][0]);
 		}
 
+	}
+
+	const createChecklist = (todo) => {
+		const checklist = document.createElement("ol");
+		const items = todo.checklist.split(",");
+		items.forEach((i) => {
+			const li = document.createElement("li");	
+			li.innerText = i;
+			checklist.appendChild(li);
+		});
+		checklist.classList.add("checklist");
+		return checklist;
 	}
 
 	const setPriorityHighlight = (todo, todoCard) => {
