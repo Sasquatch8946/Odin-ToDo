@@ -52,7 +52,7 @@ const displayController = (function () {
 		const cardDate = document.createElement("div");
 		cardDate.innerText = todo.dueDate;
 		const cardPriority = document.createElement("div");
-		cardPriority.innerText = todo.priority;
+		cardPriority.innerText = `Priority: ${todo.priority}`;
 		const cardChecklist = document.createElement("div");
 		cardChecklist.innerText = todo.checklist;
 		const cardNotes = document.createElement("div");
@@ -93,6 +93,12 @@ for (let project in projects) {
 	displayController.createProject(project);
 	displayController.createTodoCard(project, projects[project][0]);
 }
+
+const dialog = document.querySelector("dialog");
+const newTodo = document.querySelector("button.new-todo");
+newTodo.addEventListener("click", () => {
+	dialog.showModal();
+});
 
 
 

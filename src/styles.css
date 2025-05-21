@@ -66,3 +66,23 @@
     max-height: max-content;
 }
 
+.form-wrapper {
+    display: grid;
+}
+
+dialog {
+    margin: auto;
+    padding: 1rem;
+}
+
+.form-wrapper form {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns:  2fr 3fr;
+}
+
