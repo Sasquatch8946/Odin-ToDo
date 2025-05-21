@@ -65,9 +65,19 @@ const displayController = (function () {
 		container.appendChild(todoCard);
 	}
 
+	const populateProjects = () => {
+		for (let project in projects) {
+			console.log(projects[project]);
+			displayController.createProject(project);
+			displayController.createTodoCard(project, projects[project][0]);
+		}
+
+	}
+
 	return {
 		createProject,
 		createTodoCard,
+		populateProjects,
 	}
 })();
 
@@ -82,21 +92,9 @@ let myToDo = new ToDo("Clean the floors",
 	"move the furniture, sweep, wetjet",
 	"be thorough");
 
-console.log(myToDo);
-
-console.log(typeof projects.today);
-
 projects.Today.push(myToDo);
 
-function populateProjects() {
-	for (let project in projects) {
-		console.log(projects[project]);
-		displayController.createProject(project);
-		displayController.createTodoCard(project, projects[project][0]);
-	}
-}
-
-populateProjects();
+displayController.populateProjects();
 
 const dialog = document.querySelector("dialog");
 const newTodo = document.querySelector("button.new-todo");
