@@ -47,47 +47,64 @@ const displayController = (function () {
 		projectTitle.focus();
 	}
 
-	const createTodoCard = (projectName, todo) => {
+	const createTodoCard = (todo) => {
 		const container = getContainer();
+		const todoCard = createCard();
+		const cardTitle = createCardTitle(todo);
+		const hiddenContent = createHiddenContent(todo);
+		setPriorityHighlight(todo, todoCard);
+		todoCard.appendChild(cardTitle);
+		todoCard.appendChild(hiddenContent);
+		container.appendChild(todoCard);
+		todoCard.addEventListener("click", toggleContentVisibility);	
+	}
+
+	const createCard = () => {
 		const todoCard = document.createElement("div");
 		todoCard.classList.add("todo-card");
+		return todoCard;
+	}
+
+	const createCardTitle = (todo) => {
 		const cardTitle = document.createElement("div");
 		cardTitle.dataset.id = todo.id;
 		cardTitle.innerText = `${todo.title} (Due: ${todo.dueDate})`;
 		cardTitle.classList.add("title");
+		return cardTitle;
+	}
+
+	const createHiddenContent = (todo) => {
 		const hiddenContent = document.createElement("div");
 		hiddenContent.classList.add("hidden");
 		const cardDescription = document.createElement("div");
 		cardDescription.innerText = todo.description;
-		const cardDate = document.createElement("div");
 		const cardPriority = document.createElement("div");
 		cardPriority.innerText = `Priority: ${todo.priority}`;
 		const cardChecklist = document.createElement("div");
 		cardChecklist.innerText = todo.checklist;
 		const cardNotes = document.createElement("div");
 		cardNotes.innerText = todo.notes;
-		todoCard.appendChild(cardTitle);
 		hiddenContent.appendChild(cardDescription);
-		hiddenContent.appendChild(cardDate);
 		hiddenContent.appendChild(cardChecklist);
 		hiddenContent.appendChild(cardNotes);
-		setPriorityHighlight(todo, todoCard);
-		todoCard.appendChild(hiddenContent);
-		container.appendChild(todoCard);
-		todoCard.addEventListener("click", (e) => {
-			const cn = Array.from(e.currentTarget.childNodes);
-			if (cn[1].classList[0] === "hidden") {
-				cn[1].classList.remove("hidden");
-			} else {
-				cn[1].classList.add("hidden");
-			}
-		});
+		return hiddenContent;
+	}
+
+	const toggleContentVisibility = (e) => {
+
+		const cn = Array.from(e.currentTarget.childNodes);
+		if (cn[1].classList[0] === "hidden") {
+			cn[1].classList.remove("hidden");
+		} else {
+			cn[1].classList.add("hidden");
+		}
+
 	}
 
 	const populateProjects = () => {
 		for (let project in projects) {
 			displayController.createProject(project);
-			displayController.createTodoCard(project, projects[project][0]);
+			displayController.createTodoCard(projects[project][0]);
 		}
 
 	}
