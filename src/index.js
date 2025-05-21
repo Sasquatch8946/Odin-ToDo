@@ -88,11 +88,15 @@ console.log(typeof projects.today);
 
 projects.Today.push(myToDo);
 
-for (let project in projects) {
-	console.log(projects[project]);
-	displayController.createProject(project);
-	displayController.createTodoCard(project, projects[project][0]);
+function populateProjects() {
+	for (let project in projects) {
+		console.log(projects[project]);
+		displayController.createProject(project);
+		displayController.createTodoCard(project, projects[project][0]);
+	}
 }
+
+populateProjects();
 
 const dialog = document.querySelector("dialog");
 const newTodo = document.querySelector("button.new-todo");
