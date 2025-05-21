@@ -20,6 +20,26 @@ class ToDo {
 
 const displayController = (function () {
 
+
+	const dialog = document.querySelector("dialog");
+
+	const activateNewToDoButton = () => {
+		const newTodo = document.querySelector("button.new-todo");
+		newTodo.addEventListener("click", () => {
+			dialog.showModal();
+		});
+	}
+
+	const activateDialogClose = () => {
+		const closeBtn = document.querySelector("dialog button");
+		closeBtn.addEventListener("click", () => {
+			dialog.close();
+		});
+	}
+
+	activateNewToDoButton();
+	activateDialogClose();
+
 	const priorityColorCode = {
 		high: "red",
 		medium: "blue",
@@ -101,6 +121,7 @@ const displayController = (function () {
 	}
 
 	const populateProjects = () => {
+		const projects = todoProject.projects;
 		for (let project in projects) {
 			displayController.createProject(project);
 			displayController.createTodoCard(projects[project][0]);
@@ -124,6 +145,7 @@ const displayController = (function () {
 		todoCard.style.borderColor = priorityColorCode[todo.priority];	
 	}
 
+
 	return {
 		createProject,
 		createTodoCard,
@@ -131,26 +153,27 @@ const displayController = (function () {
 	}
 })();
 
-let projects = {
-	Today: []
-}
+const todoProject = (function() {
+	let projects = {
+		Today: []
+	}
 
-let myToDo = new ToDo("Clean the floors",
-	"Sweep and wetjet the floors in the kitchen, living room, and entryway.",
-	"5/15/25",
-	"high",
-	"move the furniture, sweep, wetjet",
-	"be thorough");
+	let myToDo = new ToDo("Clean the floors",
+		"Sweep and wetjet the floors in the kitchen, living room, and entryway.",
+		"5/15/25",
+		"high",
+		"move the furniture, sweep, wetjet",
+		"be thorough");
 
-projects.Today.push(myToDo);
+	projects.Today.push(myToDo);
+
+	return {
+		projects,
+	}
+})();
 
 displayController.populateProjects();
 
-const dialog = document.querySelector("dialog");
-const newTodo = document.querySelector("button.new-todo");
-newTodo.addEventListener("click", () => {
-	dialog.showModal();
-});
 
 
 
