@@ -19,6 +19,12 @@ class ToDo {
 
 const displayController = (function () {
 
+	const priorityColorCode = {
+		high: "red",
+		medium: "blue",
+		low: "green",
+	}
+
 	const getContainer = () => {
 		return document.querySelector(".todos");
 	};
@@ -59,9 +65,10 @@ const displayController = (function () {
 		cardNotes.innerText = todo.notes;
 		todoCard.appendChild(cardTitle);
 		todoCard.appendChild(cardDescription);
-		todoCard.appendChild(cardPriority);
+		todoCard.appendChild(cardDate);
 		todoCard.appendChild(cardChecklist);
 		todoCard.appendChild(cardNotes);
+		setPriorityHighlight(todo, todoCard);
 		container.appendChild(todoCard);
 	}
 
@@ -72,6 +79,10 @@ const displayController = (function () {
 			displayController.createTodoCard(project, projects[project][0]);
 		}
 
+	}
+
+	const setPriorityHighlight = (todo, todoCard) => {
+		todoCard.style.borderColor = priorityColorCode[todo.priority];	
 	}
 
 	return {
