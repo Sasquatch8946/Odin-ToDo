@@ -24,7 +24,7 @@ const displayController = (function () {
 	const dialog = document.querySelector("dialog");
 
 	const activateNewToDoButton = () => {
-		const newTodo = document.querySelector("button.new-todo");
+		const newTodo = document.querySelector(".new-button > button");
 		newTodo.addEventListener("click", () => {
 			dialog.showModal();
 		});

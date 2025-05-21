@@ -17,7 +17,6 @@
 }
 
 .new-todo {
-    grid-column: 2;
 }
 
 .project-section {
@@ -51,6 +50,12 @@
     min-width: 200px;
     min-height: 500px;
     grid-template-rows: max-content 1fr;
+}
+
+.todo-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .title {
@@ -92,5 +97,10 @@ dialog {
 
 .checklist {
     padding-left: 1rem;
+}
+
+.new-button {
+    display: flex;
+    justify-content: center;
 }
 
