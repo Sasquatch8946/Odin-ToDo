@@ -145,6 +145,29 @@ const displayController = (function () {
 		todoCard.style.borderColor = priorityColorCode[todo.priority];	
 	}
 
+	const activateFormSubmit = () => {
+		const form = document.querySelector("form");
+		form.addEventListener("submit", (e) => {
+			e.preventDefault();
+			console.log(e.target);
+			const data = new FormData(form);
+			console.log(data.get("Todo name"));
+			const details = [...data.entries()];
+			console.log(details);
+			clearForm();
+		});
+	}
+
+	activateFormSubmit();	
+
+	const clearForm = () => {
+		const inputs = document.querySelectorAll("form input");
+		inputs.forEach((input) => {
+			if (input.type != 'submit') {
+				input.value = "";
+			}
+		});
+	}
 
 	return {
 		createProject,
@@ -167,8 +190,13 @@ const todoProject = (function() {
 
 	projects.Today.push(myToDo);
 
+	const addTodo = (projectName, todo) => {
+		projects[projectName].push(todo);	
+	}
+
 	return {
 		projects,
+		addTodo,
 	}
 })();
 

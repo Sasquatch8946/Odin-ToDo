@@ -16,8 +16,10 @@
     grid-column: 2;
 }
 
-.new-todo {
+.form-row > input {
+    padding: 2px 5px 2px 5px;
 }
+
 
 .project-section {
     display: grid;
@@ -73,6 +75,7 @@
 
 .form-wrapper {
     display: grid;
+    gap: 5px;
 }
 
 dialog {
