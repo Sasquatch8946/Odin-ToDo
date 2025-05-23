@@ -1,1 +1,2 @@
-[] Create a dialog form for the new todo button.
+[x] Create a dialog form for the new todo button.
+[] Figure out how to associate todo form with project in focus.

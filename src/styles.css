@@ -16,6 +16,12 @@
     grid-column: 2;
 }
 
+.main-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
 .form-row > input {
     padding: 2px 5px 2px 5px;
 }
@@ -55,9 +61,7 @@
 }
 
 .todo-section {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    /* display: flex;*/
 }
 
 .title {
@@ -105,5 +109,9 @@ dialog {
 .new-button {
     display: flex;
     justify-content: center;
+}
+
+button {
+    padding: 2px;
 }
 

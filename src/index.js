@@ -46,8 +46,8 @@ const displayController = (function () {
 		low: "green",
 	}
 
-	const getContainer = () => {
-		return document.querySelector(".todos");
+	const getWrapper = () => {
+		return document.querySelector(".todo-section");
 	};
 	
 	const getSidebar = () => {
@@ -67,8 +67,11 @@ const displayController = (function () {
 		projectTitle.focus();
 	}
 
-	const createTodoCard = (todo) => {
-		const container = getContainer();
+	const createTodoCard = (projectName, todo) => {
+		const wrapper = getWrapper();
+		const container = document.createElement("div");
+		container.classList.add("todos");
+		container.dataset.project = projectName;
 		const todoCard = createCard();
 		const cardTitle = createCardTitle(todo);
 		const hiddenContent = createHiddenContent(todo);
@@ -77,6 +80,7 @@ const displayController = (function () {
 		todoCard.appendChild(hiddenContent);
 		container.appendChild(todoCard);
 		todoCard.addEventListener("click", toggleContentVisibility);	
+		wrapper.appendChild(container);
 	}
 
 	const createCard = () => {
@@ -124,7 +128,7 @@ const displayController = (function () {
 		const projects = todoProject.projects;
 		for (let project in projects) {
 			displayController.createProject(project);
-			displayController.createTodoCard(projects[project][0]);
+			displayController.createTodoCard(project, projects[project][0]);
 		}
 
 	}
@@ -154,6 +158,16 @@ const displayController = (function () {
 			console.log(data.get("Todo name"));
 			const details = [...data.entries()];
 			console.log(details);
+			const todoName = details[0][1];
+			const dueDate = details[1][1];
+			const descript = details[2][1];
+			const priority = details[3][1];
+			const checklist = details[4][1];
+			const notes = details[5][1];
+			const todo = new ToDo(todoName, descript, dueDate, priority, checklist, notes);
+			console.log(document.activeElement);
+			const project = document.activeElement.dataset.project // this may need to change later when I add more projects
+			todoProject.addTodo(project, todo);
 			clearForm();
 		});
 	}
@@ -191,7 +205,8 @@ const todoProject = (function() {
 	projects.Today.push(myToDo);
 
 	const addTodo = (projectName, todo) => {
-		projects[projectName].push(todo);	
+		console.log(projects);
+		todoProject.projects[projectName].push(todo);	
 	}
 
 	return {
