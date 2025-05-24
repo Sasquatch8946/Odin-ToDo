@@ -190,7 +190,7 @@ const displayController = (function () {
 			console.log(todo);
 			const project = document.querySelector('.todos').dataset.project;
 			const pubData = { project, todo };
-			PubSub.publish("newTodo", pubData);
+			PubSub.publish("newTodo.formSubmission", pubData);
 			clearForm();
 		});
 	}
@@ -235,7 +235,7 @@ const todoProject = (function() {
 	}
 
 
-	PubSub.subscribe("newTodo", addTodo);
+	PubSub.subscribe("newTodo.formSubmission", addTodo);
 
 	return {
 		projects,
