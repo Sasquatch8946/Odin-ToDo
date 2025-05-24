@@ -1,4 +1,5 @@
 import "./styles.css";
+const PubSub = require('pubsub-js');
 
 class ToDo {
 	constructor(title,
@@ -50,12 +51,12 @@ const displayController = (function () {
 		return document.querySelector(".todo-section");
 	};
 	
-	const getSidebar = () => {
-		return document.querySelector(".sidebar");
+	const getProjectContainer = () => {
+		return document.querySelector(".project-section");
 	}
 
 	const createProject = (projectName) => {
-		const container = getSidebar();
+		const container = getProjectContainer();
 		const project = document.createElement("div");
 		const projectTitle = document.createElement("button");
 		projectTitle.classList.add("project-title");
@@ -126,11 +127,31 @@ const displayController = (function () {
 
 	const populateProjects = () => {
 		const projects = todoProject.projects;
+		if (getProjectContainer()) {
+			clearProjects();
+			createProjectContainer();
+		} else {
+			createProjectContainer();
+		}
 		for (let project in projects) {
 			displayController.createProject(project);
-			displayController.createTodoCard(project, projects[project][0]);
+			projects[project].forEach((t) => {
+				createTodoCard(project, t);
+			});
 		}
 
+	}
+
+	const clearProjects = () => {
+		const projectSection = document.querySelector("div.project-section");
+		projectSection.remove();
+	}
+
+	const createProjectContainer = () => {
+		const sidebar = document.querySelector("div.sidebar");
+		const projectContainer = document.createElement("div");
+		projectContainer.classList.add("project-section");
+		sidebar.appendChild(projectContainer);
 	}
 
 	const createChecklist = (todo) => {
@@ -166,8 +187,8 @@ const displayController = (function () {
 			const notes = details[5][1];
 			const todo = new ToDo(todoName, descript, dueDate, priority, checklist, notes);
 			console.log(document.activeElement);
-			const project = document.activeElement.dataset.project // this may need to change later when I add more projects
-			todoProject.addTodo(project, todo);
+			const project = document.querySelector('.todos').dataset.project;
+			PubSub.publish("newTodo", project, todo);
 			clearForm();
 		});
 	}
