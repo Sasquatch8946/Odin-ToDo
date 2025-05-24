@@ -1,2 +1,5 @@
 [x] Create a dialog form for the new todo button.
-[] Figure out how to associate todo form with project in focus.
+[x] Figure out how to associate todo form with project in focus. Add data-project attribute
+    to todo-section.
+[]  Make createTodoCard take an object containing project name and todo so it can 
+    work with pubsub.

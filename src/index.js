@@ -84,6 +84,8 @@ const displayController = (function () {
 		wrapper.appendChild(container);
 	}
 
+	PubSub.subscribe("newTodo.addCard", createTodoCard);
+
 	const createCard = () => {
 		const todoCard = document.createElement("div");
 		todoCard.classList.add("todo-card");
@@ -105,11 +107,13 @@ const displayController = (function () {
 		cardDescription.innerText = todo.description;
 		const cardPriority = document.createElement("div");
 		cardPriority.innerText = `Priority: ${todo.priority}`;
-		const cardChecklist = createChecklist(todo);
+		if (todo.checklist) {
+			const cardChecklist = createChecklist(todo);
+			hiddenContent.appendChild(cardChecklist);
+		}
 		const cardNotes = document.createElement("div");
 		cardNotes.innerText = todo.notes;
 		hiddenContent.appendChild(cardDescription);
-		hiddenContent.appendChild(cardChecklist);
 		hiddenContent.appendChild(cardNotes);
 		return hiddenContent;
 	}
@@ -232,6 +236,7 @@ const todoProject = (function() {
 		const projectName = pubData.project;
 		const todo = pubData.todo;
 		todoProject.projects[projectName].push(todo);	
+		PubSub.publish("newTodo.addCard", pubData);
 	}
 
 
