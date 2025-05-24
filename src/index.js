@@ -186,9 +186,11 @@ const displayController = (function () {
 			const checklist = details[4][1];
 			const notes = details[5][1];
 			const todo = new ToDo(todoName, descript, dueDate, priority, checklist, notes);
-			console.log(document.activeElement);
+			console.log("todo object from event listener:");
+			console.log(todo);
 			const project = document.querySelector('.todos').dataset.project;
-			PubSub.publish("newTodo", project, todo);
+			const pubData = { project, todo };
+			PubSub.publish("newTodo", pubData);
 			clearForm();
 		});
 	}
@@ -225,10 +227,15 @@ const todoProject = (function() {
 
 	projects.Today.push(myToDo);
 
-	const addTodo = (projectName, todo) => {
-		console.log(projects);
+
+	const addTodo = (_msg, pubData) => {
+		const projectName = pubData.project;
+		const todo = pubData.todo;
 		todoProject.projects[projectName].push(todo);	
 	}
+
+
+	PubSub.subscribe("newTodo", addTodo);
 
 	return {
 		projects,
