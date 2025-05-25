@@ -13,7 +13,6 @@
 
 .todos {
     display: grid;
-    grid-column: 2;
 }
 
 .main-content {
@@ -61,7 +60,8 @@
 }
 
 .todo-section {
-    /* display: flex;*/
+    display: grid;
+    row-gap: 5px;
 }
 
 .title {

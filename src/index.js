@@ -1,5 +1,6 @@
 import "./styles.css";
 const PubSub = require('pubsub-js');
+import { format } from 'date-fns';
 
 class ToDo {
 	constructor(title,
@@ -68,11 +69,13 @@ const displayController = (function () {
 		projectTitle.focus();
 	}
 
-	const createTodoCard = (projectName, todo) => {
+	const createTodoCard = (_msg, data) => {
+		const projectName = data.projectName 
+		const todo = data.todo;
 		const wrapper = getWrapper();
+		wrapper.dataset.project = projectName;
 		const container = document.createElement("div");
 		container.classList.add("todos");
-		container.dataset.project = projectName;
 		const todoCard = createCard();
 		const cardTitle = createCardTitle(todo);
 		const hiddenContent = createHiddenContent(todo);
@@ -94,8 +97,9 @@ const displayController = (function () {
 
 	const createCardTitle = (todo) => {
 		const cardTitle = document.createElement("div");
+		const dateStr = formatDate(todo.dueDate);
 		cardTitle.dataset.id = todo.id;
-		cardTitle.innerText = `${todo.title} (Due: ${todo.dueDate})`;
+		cardTitle.innerText = `${todo.title} (Due: ${dateStr})`;
 		cardTitle.classList.add("title");
 		return cardTitle;
 	}
@@ -140,7 +144,7 @@ const displayController = (function () {
 		for (let project in projects) {
 			displayController.createProject(project);
 			projects[project].forEach((t) => {
-				createTodoCard(project, t);
+				createTodoCard(null, {projectName: project, todo: t});
 			});
 		}
 
@@ -192,7 +196,7 @@ const displayController = (function () {
 			const todo = new ToDo(todoName, descript, dueDate, priority, checklist, notes);
 			console.log("todo object from event listener:");
 			console.log(todo);
-			const project = document.querySelector('.todos').dataset.project;
+			const project = document.querySelector('.todo-section').dataset.project;
 			const pubData = { project, todo };
 			PubSub.publish("newTodo.formSubmission", pubData);
 			clearForm();
@@ -208,6 +212,10 @@ const displayController = (function () {
 				input.value = "";
 			}
 		});
+	}
+
+	const formatDate = (date) => {
+		return format(date, "M/dd/yyyy");
 	}
 
 	return {
