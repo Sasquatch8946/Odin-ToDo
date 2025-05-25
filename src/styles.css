@@ -115,3 +115,7 @@ button {
     padding: 2px;
 }
 
+button.project {
+    grid-row: -1;
+}
+
