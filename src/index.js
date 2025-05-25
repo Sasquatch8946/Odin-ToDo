@@ -23,7 +23,7 @@ class ToDo {
 const displayController = (function () {
 
 
-	const dialog = document.querySelector("dialog");
+	const dialog = document.querySelector("dialog.todo-form");
 
 	const activateNewToDoButton = () => {
 		const newTodo = document.querySelector(".new-button > button");
@@ -39,8 +39,20 @@ const displayController = (function () {
 		});
 	}
 
+	const activateNewProjBtn = () => {
+		const newProjBtn = document.querySelector('button.project');
+		newProjBtn.addEventListener("click", () => {
+			const projectSection = document.querySelector('.project-section');
+			const projectDiv = document.createElement('button');
+			projectDiv.innerText = "New Project";
+			projectDiv.classList.add("project-title");
+			projectSection.appendChild(projectDiv);
+		});
+	}
+
 	activateNewToDoButton();
 	activateDialogClose();
+	activateNewProjBtn();
 
 	const priorityColorCode = {
 		high: "red",
@@ -58,14 +70,14 @@ const displayController = (function () {
 
 	const createProject = (projectName) => {
 		const container = getProjectContainer();
-		const project = document.createElement("div");
+//		const projectWrapper = document.createElement("div");
+//		projectWrapper.classList.add("project-wrapper");
 		const projectTitle = document.createElement("button");
 		projectTitle.classList.add("project-title");
 		projectTitle.innerText = projectName;
-		project.appendChild(projectTitle);
-		project.classList.add("project-section");
+//		projectWrapper.appendChild(projectTitle);
+		container.appendChild(projectTitle);
 		projectTitle.dataset.project = projectName;
-		container.appendChild(project);
 		projectTitle.focus();
 	}
 
