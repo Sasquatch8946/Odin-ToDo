@@ -20,6 +20,15 @@ class ToDo {
 	}
 }
 
+class Project {
+	constructor(
+		projectName,
+	) {
+		this.name = projectName;
+		this.todos = [];
+	}
+}
+
 const displayController = (function () {
 
 
@@ -46,8 +55,21 @@ const displayController = (function () {
 			const projectDiv = document.createElement('button');
 			projectDiv.innerText = "New Project";
 			projectDiv.classList.add("project-title");
+			const project = new Project(projectDiv.innerText);
+			PubSub.publish("newProject", project);
+			projectDiv.dataset.id = project.id;
+			projectDiv.addEventListener("dblclick", enableEditOnDblClick);
+			projectDiv.addEventListener("blur", () => {
+				console.log("project button lost focus");
+			});
 			projectSection.appendChild(projectDiv);
 		});
+	}
+	
+	const enableEditOnDblClick = (event) => {
+		const btn = event.target;
+		btn.contentEditable = true;
+		btn.focus();
 	}
 
 	activateNewToDoButton();
@@ -69,6 +91,8 @@ const displayController = (function () {
 	}
 
 	const createProject = (projectName) => {
+		console.log("PROJECT NAME");
+		console.log(projectName);
 		const container = getProjectContainer();
 //		const projectWrapper = document.createElement("div");
 //		projectWrapper.classList.add("project-wrapper");
@@ -154,9 +178,9 @@ const displayController = (function () {
 			createProjectContainer();
 		}
 		for (let project in projects) {
-			displayController.createProject(project);
-			projects[project].forEach((t) => {
-				createTodoCard(null, {projectName: project, todo: t});
+			displayController.createProject(projects[project].name);
+			projects[project].todos.forEach((t) => {
+				createTodoCard(null, {projectName: project.name, todo: t});
 			});
 		}
 
@@ -238,8 +262,17 @@ const displayController = (function () {
 })();
 
 const todoProject = (function() {
-	let projects = {
-		Today: []
+	let projects = {};
+
+	const id = crypto.randomUUID();
+
+	const today = new Project("Today");
+
+	projects[id] = today;
+
+	const addProject = (_msg, data) => {
+		projects.push(data);
+		console.log(projects);
 	}
 
 	let myToDo = new ToDo("Clean the floors",
@@ -249,7 +282,13 @@ const todoProject = (function() {
 		"move the furniture, sweep, wetjet",
 		"be thorough");
 
-	projects.Today.push(myToDo);
+	projects[id].todos.push(myToDo);
+
+	console.log("PROJECTS");
+
+	console.log(projects);
+	
+	PubSub.subscribe("newProject", addProject);
 
 
 	const addTodo = (_msg, pubData) => {
