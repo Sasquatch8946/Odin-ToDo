@@ -26,6 +26,7 @@ class Project {
 	) {
 		this.name = projectName;
 		this.todos = [];
+		this.id = crypto.randomUUID();
 	}
 }
 
@@ -59,8 +60,12 @@ const displayController = (function () {
 			PubSub.publish("newProject", project);
 			projectDiv.dataset.id = project.id;
 			projectDiv.addEventListener("dblclick", enableEditOnDblClick);
-			projectDiv.addEventListener("blur", () => {
+			projectDiv.addEventListener("blur", (e) => {
 				console.log("project button lost focus");
+				const projectName = e.target.innerText;
+				PubSub.publish("newProject.nameChange", {"project": e.target.dataset.id,
+					"name": projectName
+				});
 			});
 			projectSection.appendChild(projectDiv);
 		});
@@ -264,14 +269,13 @@ const displayController = (function () {
 const todoProject = (function() {
 	let projects = {};
 
-	const id = crypto.randomUUID();
-
 	const today = new Project("Today");
 
-	projects[id] = today;
+	projects[today.id] = today;
 
 	const addProject = (_msg, data) => {
-		projects.push(data);
+		const id = crypto.randomUUID();
+		projects[id] = data;
 		console.log(projects);
 	}
 
