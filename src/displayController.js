@@ -1,6 +1,7 @@
 import { format } from 'date-fns';
 import { Project, todoProject, ToDo } from './todoProject.js';
 const PubSub = require('pubsub-js');
+import editImage from './file-edit.svg';
 
 export const displayController = (function () {
 
@@ -119,6 +120,7 @@ export const displayController = (function () {
 
 	const createHiddenContent = (todo) => {
 		const hiddenContent = document.createElement("div");
+        hiddenContent.classList.add("expandable-content");
 		hiddenContent.classList.add("hidden");
 		const cardDescription = document.createElement("div");
 		cardDescription.innerText = todo.description;
@@ -129,16 +131,22 @@ export const displayController = (function () {
 			hiddenContent.appendChild(cardChecklist);
 		}
 		const cardNotes = document.createElement("div");
+        const eImg = document.createElement("img");
+        eImg.src = editImage;
+        eImg.width = "30";
+        eImg.height = "30";
+        eImg.classList.add('edit-img');
 		cardNotes.innerText = todo.notes;
 		hiddenContent.appendChild(cardDescription);
 		hiddenContent.appendChild(cardNotes);
+        hiddenContent.appendChild(eImg);
 		return hiddenContent;
 	}
 
 	const toggleContentVisibility = (e) => {
 
 		const cn = Array.from(e.currentTarget.childNodes);
-		if (cn[1].classList[0] === "hidden") {
+		if (cn[1].classList[1] === "hidden") {
 			cn[1].classList.remove("hidden");
 		} else {
 			cn[1].classList.add("hidden");
