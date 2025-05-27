@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { Project, todoProject } from './todoProject.js';
+import { Project, todoProject, ToDo } from './todoProject.js';
 const PubSub = require('pubsub-js');
 
 export const displayController = (function () {
@@ -157,7 +157,7 @@ export const displayController = (function () {
 		for (let project in projects) {
 			displayController.createProject(projects[project].name);
 			projects[project].todos.forEach((t) => {
-				createTodoCard(null, {projectName: project.name, todo: t});
+				createTodoCard(null, {projectName: projects[project].id, todo: t});
 			});
 		}
 

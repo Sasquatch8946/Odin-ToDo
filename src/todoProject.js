@@ -60,7 +60,7 @@ const todoProject = (function() {
 	const addTodo = (_msg, pubData) => {
 		const projectName = pubData.project;
 		const todo = pubData.todo;
-		todoProject.projects[projectName].push(todo);	
+		todoProject.projects[projectName].todos.push(todo);	
 		PubSub.publish("newTodo.addCard", pubData);
 	}
 
