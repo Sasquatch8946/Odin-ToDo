@@ -3,4 +3,12 @@
     to todo-section.
 [x]  Make createTodoCard take an object containing project name and todo so it can 
     work with pubsub.
-[] Add an edit button to the hiddenContent of each todo.
+[x] Add an edit button to the hiddenContent of each todo.
+[x] Fix New Project button so it correctly makes the project key and id property identical
+   and also allows user to change the name of the project.
+[] Give edit button functionality. Probably need to add a 'complete' button to signal the
+   end of changes.
+[x] Allow edit button to be clicked without minimizing the card. Attach event listener to div.title,
+    i.e. previous sibling. Edit toggleContentVisibility to target the expandable content via
+    the sibling relationship.
+[] Put dueDate inside of its own div or span to make it easier to target during editing.

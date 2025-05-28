@@ -35,9 +35,12 @@ export const displayController = (function () {
 			projectDiv.addEventListener("dblclick", enableEditOnDblClick);
 			projectDiv.addEventListener("blur", (e) => {
 				console.log("project button lost focus");
+				if (e.target.contentEditable === "true") {
+					e.target.contentEditable = "false";
+				}
 				const projectName = e.target.innerText;
-				PubSub.publish("newProject.nameChange", {"project": e.target.dataset.id,
-					"name": projectName
+				PubSub.publish("projectNameChange", {"projectId": e.target.dataset.id,
+					"projectName": projectName
 				});
 			});
 			projectSection.appendChild(projectDiv);
@@ -48,6 +51,29 @@ export const displayController = (function () {
 		const btn = event.target;
 		btn.contentEditable = true;
 		btn.focus();
+	}
+
+	const activateEditBtn = (element) => {
+		element.addEventListener("click", (e) => {
+			console.log("edit button clicked");
+			makeEditable(e.target.parentNode);
+			makeEditable(e.target.parentNode.previousSibling);
+/*			const s = getSiblingElements(e.target);
+			console.log(s);
+			s.forEach((el) => {
+				makeEditable(el);
+			});*/
+		});
+	}
+
+	const getSiblingElements = (element) => {
+		return Array.from(element.parentNode.children).filter((el) => {
+			return el !== element;
+		});
+	}
+
+	const makeEditable = (element) => {
+		element.contentEditable = "true";
 	}
 
 	activateNewToDoButton();
@@ -97,7 +123,7 @@ export const displayController = (function () {
 		todoCard.appendChild(cardTitle);
 		todoCard.appendChild(hiddenContent);
 		container.appendChild(todoCard);
-		todoCard.addEventListener("click", toggleContentVisibility);	
+		cardTitle.addEventListener("click", toggleContentVisibility);	
 		wrapper.appendChild(container);
 	}
 
@@ -136,6 +162,7 @@ export const displayController = (function () {
         eImg.width = "30";
         eImg.height = "30";
         eImg.classList.add('edit-img');
+		activateEditBtn(eImg);
 		cardNotes.innerText = todo.notes;
 		hiddenContent.appendChild(cardDescription);
 		hiddenContent.appendChild(cardNotes);
@@ -145,11 +172,13 @@ export const displayController = (function () {
 
 	const toggleContentVisibility = (e) => {
 
-		const cn = Array.from(e.currentTarget.childNodes);
-		if (cn[1].classList[1] === "hidden") {
-			cn[1].classList.remove("hidden");
-		} else {
-			cn[1].classList.add("hidden");
+		if (e.currentTarget.contentEditable !== "true") {
+			const ns = e.currentTarget.nextSibling;
+			if (ns.classList[1] === "hidden") {
+				ns.classList.remove("hidden");
+			} else {
+				ns.classList.add("hidden");
+			}
 		}
 
 	}

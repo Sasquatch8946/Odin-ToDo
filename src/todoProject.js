@@ -36,8 +36,7 @@ const todoProject = (function() {
 	projects[today.id] = today;
 
 	const addProject = (_msg, data) => {
-		const id = crypto.randomUUID();
-		projects[id] = data;
+		projects[data.id] = data;
 		console.log(projects);
 	}
 
@@ -64,8 +63,15 @@ const todoProject = (function() {
 		PubSub.publish("newTodo.addCard", pubData);
 	}
 
+	const setProjectName = (_msg, pubData) => {
+		projects[pubData.projectId].name = pubData.projectName;
+		console.log(projects);
+	}
+
 
 	PubSub.subscribe("newTodo.formSubmission", addTodo);
+
+	PubSub.subscribe("projectNameChange", setProjectName);
 
 	return {
 		projects,
