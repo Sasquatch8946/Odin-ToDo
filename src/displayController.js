@@ -32,17 +32,7 @@ export const displayController = (function () {
 			const project = new Project(projectDiv.innerText);
 			PubSub.publish("newProject", project);
 			projectDiv.dataset.id = project.id;
-			projectDiv.addEventListener("dblclick", enableEditOnDblClick);
-			projectDiv.addEventListener("blur", (e) => {
-				console.log("project button lost focus");
-				if (e.target.contentEditable === "true") {
-					e.target.contentEditable = "false";
-				}
-				const projectName = e.target.innerText;
-				PubSub.publish("projectNameChange", {"projectId": e.target.dataset.id,
-					"projectName": projectName
-				});
-			});
+			makeProjectEditable(projectDiv);
 			projectSection.appendChild(projectDiv);
 		});
 	}
@@ -51,6 +41,9 @@ export const displayController = (function () {
 		const btn = event.target;
 		btn.contentEditable = true;
 		btn.focus();
+		const sel = window.getSelection();
+		sel.selectAllChildren(btn);
+		sel.collapseToEnd();
 	}
 
 	const activateEditBtn = (element) => {
@@ -74,6 +67,21 @@ export const displayController = (function () {
 
 	const makeEditable = (element) => {
 		element.contentEditable = "true";
+	}
+
+	const makeProjectEditable = (projectDiv) => {
+		projectDiv.addEventListener("dblclick", enableEditOnDblClick);
+		projectDiv.addEventListener("blur", (e) => {
+			console.log("project button lost focus");
+			if (e.target.contentEditable === "true") {
+				e.target.contentEditable = "false";
+			}
+			const projectName = e.target.innerText;
+			PubSub.publish("projectNameChange", {"projectId": e.target.dataset.id,
+				"projectName": projectName
+			});
+		});
+
 	}
 
 	activateNewToDoButton();
