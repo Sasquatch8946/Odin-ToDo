@@ -107,6 +107,7 @@ export const displayController = (function () {
 		const projectTitle = document.createElement("div");
 		projectTitle.classList.add("project-title");
 		projectTitle.innerText = project.name;
+		projectTitle.tabIndex = "0";
 		makeProjectEditable(projectTitle);
 		container.appendChild(projectTitle);
 		projectTitle.dataset.id = project.id;
