@@ -12,3 +12,7 @@
     i.e. previous sibling. Edit toggleContentVisibility to target the expandable content via
     the sibling relationship.
 [] Put dueDate inside of its own div or span to make it easier to target during editing.
+[] Make default project use dataset property of id instead of name.
+[] When editing project name, make it so that cursor automatically appears at end of text.
+   Might need to use text input fields for this instead of divs? Just remove the borders
+   with css?
