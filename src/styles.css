@@ -42,10 +42,11 @@
 .project-title {
     font-weight: bold;
     font-size: 1rem;
-    align-self: start;
-    border: none;
     background-color: lightgrey;
     padding: 5px;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
 }
 
 .project-title:focus {

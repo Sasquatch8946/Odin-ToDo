@@ -102,18 +102,14 @@ export const displayController = (function () {
 		return document.querySelector(".project-section");
 	}
 
-	const createProject = (projectName) => {
-		console.log("PROJECT NAME");
-		console.log(projectName);
+	const createProject = (project) => {
 		const container = getProjectContainer();
-//		const projectWrapper = document.createElement("div");
-//		projectWrapper.classList.add("project-wrapper");
-		const projectTitle = document.createElement("button");
+		const projectTitle = document.createElement("div");
 		projectTitle.classList.add("project-title");
-		projectTitle.innerText = projectName;
-//		projectWrapper.appendChild(projectTitle);
+		projectTitle.innerText = project.name;
+		makeProjectEditable(projectTitle);
 		container.appendChild(projectTitle);
-		projectTitle.dataset.project = projectName;
+		projectTitle.dataset.id = project.id;
 		projectTitle.focus();
 	}
 
@@ -200,7 +196,7 @@ export const displayController = (function () {
 			createProjectContainer();
 		}
 		for (let project in projects) {
-			displayController.createProject(projects[project].name);
+			displayController.createProject(projects[project]);
 			projects[project].todos.forEach((t) => {
 				createTodoCard(null, {projectName: projects[project].id, todo: t});
 			});
