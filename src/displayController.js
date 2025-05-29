@@ -25,15 +25,8 @@ export const displayController = (function () {
 	const activateNewProjBtn = () => {
 		const newProjBtn = document.querySelector('button.project');
 		newProjBtn.addEventListener("click", () => {
-			const projectSection = document.querySelector('.project-section');
-			const projectDiv = document.createElement('button');
-			projectDiv.innerText = "New Project";
-			projectDiv.classList.add("project-title");
-			const project = new Project(projectDiv.innerText);
-			PubSub.publish("newProject", project);
-			projectDiv.dataset.id = project.id;
-			makeProjectEditable(projectDiv);
-			projectSection.appendChild(projectDiv);
+			console.log("new project button clicked");
+			PubSub.publish("newProjectButtonClicked");
 		});
 	}
 	
@@ -102,7 +95,7 @@ export const displayController = (function () {
 		return document.querySelector(".project-section");
 	}
 
-	const createProject = (project) => {
+	const createProjectDiv = (_msg, project) => {
 		const container = getProjectContainer();
 		const projectTitle = document.createElement("div");
 		projectTitle.classList.add("project-title");
@@ -197,7 +190,7 @@ export const displayController = (function () {
 			createProjectContainer();
 		}
 		for (let project in projects) {
-			displayController.createProject(projects[project]);
+			displayController.createProjectDiv(null, projects[project]);
 			projects[project].todos.forEach((t) => {
 				createTodoCard(null, {projectName: projects[project].id, todo: t});
 			});
@@ -273,8 +266,10 @@ export const displayController = (function () {
 		return format(date, "M/dd/yyyy");
 	}
 
+	PubSub.subscribe("projectCreated", createProjectDiv);
+
 	return {
-		createProject,
+		createProjectDiv,
 		createTodoCard,
 		populateProjects,
 	}

@@ -68,10 +68,18 @@ const todoProject = (function() {
 		console.log(projects);
 	}
 
+	const createProject = (_msg) => {
+		const proj = new Project("New Project");
+		projects[proj.id] = proj;
+		PubSub.publish("projectCreated", proj);
+	}
+
 
 	PubSub.subscribe("newTodo.formSubmission", addTodo);
 
 	PubSub.subscribe("projectNameChange", setProjectName);
+
+	PubSub.subscribe("newProjectButtonClicked", createProject);
 
 	return {
 		projects,
