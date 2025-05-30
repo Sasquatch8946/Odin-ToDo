@@ -96,7 +96,7 @@ export const displayController = (function () {
 		low: "green",
 	}
 
-	const getWrapper = () => {
+	const getTodoWrapper = () => {
 		return document.querySelector(".todo-section");
 	};
 	
@@ -117,28 +117,35 @@ export const displayController = (function () {
 	}
 
 	const createTodoCard = (_msg, data) => {
-		const projectName = data.projectName 
 		const todo = data.todo;
-		const wrapper = getWrapper();
-		wrapper.dataset.project = projectName;
-		const container = document.createElement("div");
-		container.classList.add("todos");
-		const todoCard = createCard();
+		const wrapper = getTodoWrapper();
+		const container = document.querySelector(".todos");
+		const todoCard = createCard(todo.id);
 		const cardTitle = createCardTitle(todo);
 		const hiddenContent = createHiddenContent(todo);
 		setPriorityHighlight(todo, todoCard);
 		todoCard.appendChild(cardTitle);
 		todoCard.appendChild(hiddenContent);
 		container.appendChild(todoCard);
-		cardTitle.addEventListener("click", toggleContentVisibility);	
 		wrapper.appendChild(container);
+		cardTitle.addEventListener("click", toggleContentVisibility);	
+	}
+
+	const createTodoSubSection = (projectId) => {
+		const todoSection = getTodoWrapper();
+		todoSection.dataset.project = projectId;
+		const todoSubSection = document.createElement("div");
+		todoSubSection.classList.add("todos");
+		todoSection.appendChild(todoSubSection);
+		
 	}
 
 	PubSub.subscribe("newTodo.addCard", createTodoCard);
 
-	const createCard = () => {
+	const createCard = (todoId) => {
 		const todoCard = document.createElement("div");
 		todoCard.classList.add("todo-card");
+		todoCard.dataset.id = todoId;
 		return todoCard;
 	}
 
@@ -215,7 +222,8 @@ export const displayController = (function () {
 		for (let project in projects) {
 			displayController.createProjectDiv(null, projects[project]);
 			projects[project].todos.forEach((t) => {
-				createTodoCard(null, {projectName: projects[project].id, todo: t});
+				createTodoSubSection(projects[project].id);
+				createTodoCard(null, {todo: t});
 			});
 		}
 

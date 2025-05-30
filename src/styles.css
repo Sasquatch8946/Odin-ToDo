@@ -13,6 +13,7 @@
 
 .todos {
     display: grid;
+    row-gap: 5px;
 }
 
 .main-content {
