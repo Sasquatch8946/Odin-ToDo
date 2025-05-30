@@ -43,8 +43,8 @@ export const displayController = (function () {
 	const activateEditBtn = (element) => {
 		element.addEventListener("click", (e) => {
 			console.log("edit button clicked");
-			makeEditable(e.target.parentNode);
-			makeEditable(e.target.parentNode.previousSibling);
+			makeEditable(e.target.parentNode.parentNode);
+			makeEditable(e.target.parentNode.parentNode.previousSibling);
 /*			const s = getSiblingElements(e.target);
 			console.log(s);
 			s.forEach((el) => {
