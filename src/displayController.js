@@ -56,8 +56,10 @@ export const displayController = (function () {
 	const activateDelBtn = (element) => {
 		element.addEventListener("click", (e) => {
 			const todoCard = e.target.parentNode.parentNode.parentNode;
+			const todoId = todoCard.dataset.id;
 			todoCard.remove();
-			PubSub.publish("removeTodo");
+			const projectId = document.querySelector(".todo-section").dataset.project;
+			PubSub.publish("removeTodo", {todoId, projectId});
 		});
 	}
 

@@ -63,6 +63,16 @@ const todoProject = (function() {
 		PubSub.publish("newTodo.addCard", pubData);
 	}
 
+	const removeTodo = (_msg, pubData) => {
+		const projectId = pubData.projectId;
+		const todoId = pubData.todoId;
+		const newTodoArr = todoProject.projects[projectId].todos.filter((t) => {
+			t.id !== todoId;
+		});
+		todoProject.projects[projectId].todos = newTodoArr;
+		console.log(todoProject.projects[projectId]);
+	}
+
 	const setProjectName = (_msg, pubData) => {
 		projects[pubData.projectId].name = pubData.projectName;
 		console.log(projects);
@@ -80,6 +90,8 @@ const todoProject = (function() {
 	PubSub.subscribe("projectNameChange", setProjectName);
 
 	PubSub.subscribe("newProjectButtonClicked", createProject);
+
+	PubSub.subscribe("removeTodo", removeTodo);
 
 	return {
 		projects,
