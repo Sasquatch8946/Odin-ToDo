@@ -132,7 +132,11 @@ div.expandable-content {
     display: grid;
 }
 
-img.edit-img {
+.button-wrapper {
     justify-self: end;
+    display: flex;
+    gap: 5px;
 }
+
+
 

@@ -2,6 +2,7 @@ import { format } from 'date-fns';
 import { Project, todoProject, ToDo } from './todoProject.js';
 const PubSub = require('pubsub-js');
 import editImage from './file-edit.svg';
+import delImage from './delete.svg';
 
 export const displayController = (function () {
 
@@ -49,6 +50,14 @@ export const displayController = (function () {
 			s.forEach((el) => {
 				makeEditable(el);
 			});*/
+		});
+	}
+
+	const activateDelBtn = (element) => {
+		element.addEventListener("click", (e) => {
+			const todoCard = e.target.parentNode.parentNode.parentNode;
+			todoCard.remove();
+			PubSub.publish("removeTodo");
 		});
 	}
 
@@ -155,17 +164,31 @@ export const displayController = (function () {
 			hiddenContent.appendChild(cardChecklist);
 		}
 		const cardNotes = document.createElement("div");
+		cardNotes.innerText = todo.notes;
+		const buttonDiv = createBtnDiv();
+		hiddenContent.appendChild(cardDescription);
+		hiddenContent.appendChild(cardNotes);
+		hiddenContent.appendChild(buttonDiv);
+		return hiddenContent;
+	}
+
+	const createBtnDiv = () => {
+		const wrapper = document.createElement("div");
+		wrapper.classList.add('button-wrapper');
         const eImg = document.createElement("img");
         eImg.src = editImage;
         eImg.width = "30";
         eImg.height = "30";
         eImg.classList.add('edit-img');
 		activateEditBtn(eImg);
-		cardNotes.innerText = todo.notes;
-		hiddenContent.appendChild(cardDescription);
-		hiddenContent.appendChild(cardNotes);
-        hiddenContent.appendChild(eImg);
-		return hiddenContent;
+		const delImg = document.createElement("img");
+		delImg.src = delImage;
+		delImg.width = "30";
+		delImg.height = "30";
+		activateDelBtn(delImg);
+		wrapper.appendChild(eImg);
+		wrapper.appendChild(delImg);
+		return wrapper;
 	}
 
 	const toggleContentVisibility = (e) => {
