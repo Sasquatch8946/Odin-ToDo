@@ -153,11 +153,28 @@ export const displayController = (function () {
 
 	const createCardTitle = (todo) => {
 		const cardTitle = document.createElement("div");
+		const title = document.createElement("div");
+		title.innerText = todo.title;
 		const dateStr = formatDate(todo.dueDate);
+		const dueDateDiv = createDateSpan(dateStr); 
 		cardTitle.dataset.id = todo.id;
-		cardTitle.innerText = `${todo.title} (Due: ${dateStr})`;
-		cardTitle.classList.add("title");
+		cardTitle.classList.add("title-wrapper");
+		cardTitle.appendChild(title);
+		cardTitle.appendChild(dueDateDiv);
 		return cardTitle;
+	}
+
+	const createDateSpan = (dateStr) => {
+		const container = document.createElement("div");
+		const span = document.createElement("span");
+		span.innerText = dateStr;
+		const open = document.createTextNode("(");
+		const close = document.createTextNode(")");
+		container.appendChild(open);
+		container.appendChild(span);
+		container.appendChild(close);
+		container.classList.add("due-date");
+		return container;
 	}
 
 	const createHiddenContent = (todo) => {

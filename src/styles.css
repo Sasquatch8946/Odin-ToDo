@@ -72,9 +72,11 @@
     row-gap: 5px;
 }
 
-.title {
+.title-wrapper {
     font-weight: bold;
     font-size: 2rem;
+    display: flex;
+    gap: 5px;
 }
 
 .todo-card {
