@@ -89,9 +89,10 @@ export const displayController = (function () {
 	}
 
 	const showEditForm = (event) => {
+		const dialog = document.querySelector('dialog.todo-form.edit-form');
 		const projectId = getProjectId();
 		const todoId = event.target.closest(".todo-card").dataset.id;
-		const inputs = Array.from(document.querySelectorAll(".form-row input"));
+		const inputs = Array.from(document.querySelectorAll(".todo-form.edit-form .form-row input"));
 		const todoObj = todoProject.projects[projectId].todos.filter((t) => t.id === todoId)[0];
 		inputs.forEach((i) => {
 			var prop = i.name;
