@@ -92,6 +92,8 @@ export const displayController = (function () {
 		const dialog = document.querySelector('dialog.todo-form.edit-form');
 		const projectId = getProjectId();
 		const todoId = event.target.closest(".todo-card").dataset.id;
+		dialog.dataset.todoId = todoId;
+		dialog.dataset.projectId = projectId;
 		const inputs = Array.from(document.querySelectorAll(".todo-form.edit-form .form-row input"));
 		const todoObj = todoProject.projects[projectId].todos.filter((t) => t.id === todoId)[0];
 		inputs.forEach((i) => {
@@ -110,6 +112,13 @@ export const displayController = (function () {
 
 	const getProjectId = () => {
 		return document.querySelector(".todo-section").dataset.project;
+	}
+
+	const activateEditSubmit = () => {
+		const f = document.querySelector("dialog.todo-form.edit-form form");
+		f.addEventListener("submit", (event) => {
+			event.preventDefault();
+		});
 	}
 
 	activateNewToDoButton();
