@@ -79,6 +79,11 @@
     gap: 5px;
 }
 
+.title {
+    font-weight: bold;
+    font-size: 2rem;
+}
+
 .todo-card {
     border: 2px solid black;
     border-radius: 5px;

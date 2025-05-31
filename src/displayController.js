@@ -159,6 +159,7 @@ export const displayController = (function () {
 		const dueDateDiv = createDateSpan(dateStr); 
 		cardTitle.dataset.id = todo.id;
 		cardTitle.classList.add("title-wrapper");
+		cardTitle.classList.add("title");
 		cardTitle.appendChild(title);
 		cardTitle.appendChild(dueDateDiv);
 		return cardTitle;
