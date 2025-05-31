@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { Project, todoProject, ToDo } from './todoProject.js';
+import { todoProject, ToDo } from './todoProject.js';
 const PubSub = require('pubsub-js');
 import editImage from './file-edit.svg';
 import delImage from './delete.svg';
@@ -86,6 +86,29 @@ export const displayController = (function () {
 			});
 		});
 
+	}
+
+	const showEditForm = (event) => {
+		const projectId = getProjectId();
+		const todoId = event.target.closest(".todo-card").dataset.id;
+		const inputs = Array.from(document.querySelectorAll(".form-row input"));
+		const todoObj = todoProject.projects[projectId].todos.filter((t) => t.id === todoId)[0];
+		inputs.forEach((i) => {
+			var prop = i.name;
+			if (i.name === "dueDate") {
+				const d = new Date(todoObj[prop]);
+				const dateStr = format(d, "yyyy-MM-dd");
+				console.log(dateStr);
+				i.value = dateStr;
+			} else {
+				i.value = todoObj[prop];
+			}
+		});
+		dialog.showModal();
+	}
+
+	const getProjectId = () => {
+		return document.querySelector(".todo-section").dataset.project;
 	}
 
 	activateNewToDoButton();
@@ -207,7 +230,8 @@ export const displayController = (function () {
         eImg.width = "30";
         eImg.height = "30";
         eImg.classList.add('edit-img');
-		activateEditBtn(eImg);
+		/*activateEditBtn(eImg);*/
+		eImg.addEventListener("click", showEditForm);
 		const delImg = document.createElement("img");
 		delImg.src = delImage;
 		delImg.width = "30";

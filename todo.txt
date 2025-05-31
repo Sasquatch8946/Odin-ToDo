@@ -16,3 +16,10 @@
 [x] When editing project name, make it so that cursor automatically appears at end of text.
    Might need to use text input fields for this instead of divs? Just remove the borders
    with css?
+[] Consider removing border from elements in edit mode.
+[] Consider what to do with dueDate in edit mode. Should I temporarily replace the div/span
+   (yet to be created) with a date input field with the current date pre-filled? Would require
+   converting string back to date object?
+[x] Add a delete btn to each todo card.
+[] Add completed button in edit mode and trigger corresponding changes in the todo inside
+   of the project.
