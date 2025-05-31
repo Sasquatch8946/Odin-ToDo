@@ -42,7 +42,7 @@ const todoProject = (function() {
 
 	let myToDo = new ToDo("Clean the floors",
 		"Sweep and wetjet the floors in the kitchen, living room, and entryway.",
-		"5/15/25",
+		"5-15-2025",
 		"high",
 		"move the furniture, sweep, wetjet",
 		"be thorough");
@@ -57,10 +57,25 @@ const todoProject = (function() {
 
 
 	const addTodo = (_msg, pubData) => {
-		const projectName = pubData.project;
-		const todo = pubData.todo;
-		todoProject.projects[projectName].todos.push(todo);	
-		PubSub.publish("newTodo.addCard", pubData);
+		const projectId = pubData.project;
+		const todo = new ToDo(
+			pubData.formData.title,
+			pubData.formData.description,
+			pubData.formData.dueDate,
+			pubData.formData.priority,
+			pubData.formData.checklist,
+			pubData.formData.notes
+		)
+		todoProject.projects[projectId].todos.push(todo);	
+		PubSub.publish("newTodo.addCard", todo);
+	}
+
+	const editTodo = (_msg, pubData) => {
+		const todosArr = todoProject.project[pubData.projectId].todos;
+		const indx = todosArr.findIndex((i) => {
+			i.id === pubData.todoId;
+		});
+		todosArr[indx] = pubData.todo;
 	}
 
 	const removeTodo = (_msg, pubData) => {

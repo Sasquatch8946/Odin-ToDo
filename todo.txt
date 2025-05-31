@@ -11,7 +11,7 @@
 [x] Allow edit button to be clicked without minimizing the card. Attach event listener to div.title,
     i.e. previous sibling. Edit toggleContentVisibility to target the expandable content via
     the sibling relationship.
-[] Put dueDate inside of its own div or span to make it easier to target during editing.
+[x] Put dueDate inside of its own div or span to make it easier to target during editing.
 [x] Make default project use dataset property of id instead of name.
 [x] When editing project name, make it so that cursor automatically appears at end of text.
    Might need to use text input fields for this instead of divs? Just remove the borders
@@ -23,3 +23,5 @@
 [x] Add a delete btn to each todo card.
 [] Add completed button in edit mode and trigger corresponding changes in the todo inside
    of the project.
+[] Modify form submission so the creation of the Todo object occurs in the todoProject
+   module instead of the displayController.

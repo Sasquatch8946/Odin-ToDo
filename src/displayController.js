@@ -151,8 +151,7 @@ export const displayController = (function () {
 		projectTitle.focus();
 	}
 
-	const createTodoCard = (_msg, data) => {
-		const todo = data.todo;
+	const createTodoCard = (_msg, todo) => {
 		const wrapper = getTodoWrapper();
 		const container = document.querySelector(".todos");
 		const todoCard = createCard(todo.id);
@@ -277,7 +276,7 @@ export const displayController = (function () {
 			displayController.createProjectDiv(null, projects[project]);
 			projects[project].todos.forEach((t) => {
 				createTodoSubSection(projects[project].id);
-				createTodoCard(null, {todo: t});
+				createTodoCard(null, t);
 			});
 		}
 
@@ -311,29 +310,33 @@ export const displayController = (function () {
 		todoCard.style.borderColor = priorityColorCode[todo.priority];	
 	}
 
-	const activateFormSubmit = () => {
-		const form = document.querySelector("form");
-		form.addEventListener("submit", (e) => {
+	const getFormData = (form) => {
+		const data = new FormData(form);
+		console.log(data.get("Todo name"));
+		const details = [...data.entries()];
+		console.log(details);
+		const title = details[0][1];
+		const dueDate = details[1][1];
+		const description = details[2][1];
+		const priority = details[3][1];
+		const checklist = details[4][1];
+		const notes = details[5][1];
+		return {title, dueDate, description, priority, checklist, notes};
+	}
+
+	const submitForm = (e) => {
+			const form = document.querySelector("form");
 			e.preventDefault();
-			console.log(e.target);
-			const data = new FormData(form);
-			console.log(data.get("Todo name"));
-			const details = [...data.entries()];
-			console.log(details);
-			const todoName = details[0][1];
-			const dueDate = details[1][1];
-			const descript = details[2][1];
-			const priority = details[3][1];
-			const checklist = details[4][1];
-			const notes = details[5][1];
-			const todo = new ToDo(todoName, descript, dueDate, priority, checklist, notes);
-			console.log("todo object from event listener:");
-			console.log(todo);
+			const formData = getFormData(form);
 			const project = document.querySelector('.todo-section').dataset.project;
-			const pubData = { project, todo };
+			const pubData = { project, formData };
 			PubSub.publish("newTodo.formSubmission", pubData);
 			clearForm();
-		});
+		}
+
+	const activateFormSubmit = () => {
+		const form = document.querySelector("form");
+		form.addEventListener("submit", submitForm);
 	}
 
 	activateFormSubmit();	
