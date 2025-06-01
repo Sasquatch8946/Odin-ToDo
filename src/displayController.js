@@ -69,7 +69,7 @@ export const displayController = (function () {
 		projectDiv.addEventListener("blur", (e) => {
 			console.log("project button lost focus");
 			if (e.target.contentEditable === "true") {
-				e.target.contentEditable = "false";
+				makeEditable(e.target);
 			}
 			const projectName = e.target.innerText;
 			PubSub.publish("projectNameChange", {"projectId": e.target.dataset.id,
@@ -92,7 +92,6 @@ export const displayController = (function () {
 			if (i.name === "dueDate") {
 				const d = new Date(todoObj[prop]);
 				const dateStr = format(d, "yyyy-MM-dd");
-				console.log(dateStr);
 				i.value = dateStr;
 			} else {
 				i.value = todoObj[prop];
@@ -173,6 +172,7 @@ export const displayController = (function () {
 		const cardTitle = document.createElement("div");
 		const title = document.createElement("div");
 		title.innerText = todo.title;
+		title.classList.add("todo-title");
 		const dateStr = formatDate(todo.dueDate);
 		const dueDateDiv = createDateSpan(dateStr); 
 		cardTitle.dataset.id = todo.id;
@@ -202,6 +202,7 @@ export const displayController = (function () {
 		hiddenContent.classList.add("hidden");
 		const cardDescription = document.createElement("div");
 		cardDescription.innerText = todo.description;
+		cardDescription.classList.add("todo-description");
 		const cardPriority = document.createElement("div");
 		cardPriority.innerText = `Priority: ${todo.priority}`;
 		if (todo.checklist) {
@@ -210,6 +211,7 @@ export const displayController = (function () {
 		}
 		const cardNotes = document.createElement("div");
 		cardNotes.innerText = todo.notes;
+		cardNotes.classList.add("todo-notes");
 		const buttonDiv = createBtnDiv();
 		hiddenContent.appendChild(cardDescription);
 		hiddenContent.appendChild(cardNotes);
@@ -225,7 +227,6 @@ export const displayController = (function () {
         eImg.width = "30";
         eImg.height = "30";
         eImg.classList.add('edit-img');
-		/*activateEditBtn(eImg);*/
 		eImg.addEventListener("click", showEditForm);
 		const delImg = document.createElement("img");
 		delImg.src = delImage;
@@ -323,7 +324,7 @@ export const displayController = (function () {
 	const submitEdit = (e) => {
 			e.preventDefault();
 			const form = getEditForm();
-			const todoId = getEditDialog().todoId;
+			const todoId = getEditDialog().dataset.todoId;
 			const formData = getFormData(form);
 			const projectId = getProjectId();
 			const pubData = { projectId, formData, todoId };
@@ -359,7 +360,57 @@ export const displayController = (function () {
 		return format(date, "M/dd/yyyy");
 	}
 
+	const editCard = (_msg, todo) => {
+		const projectId = getProjectId();
+		const todoId = todo.id;
+		const todoCard = document.querySelector(`div.todo-card[data-id='${todoId}']`);
+		setCardTitle(todoCard, todo.title);
+		setCardDueDate(todoCard, todo.dueDate);
+		setChecklist(todoCard, todo.checklist);
+		setCardDescription(todoCard, todo.description);
+		setCardNotes(todoCard, todo.notes);
+	}
+
+	const setCardTitle = (element, newTitle) => {
+		const titleDiv = element.querySelector('.todo-title');
+		titleDiv.innerText = newTitle;
+	}
+	
+	const setCardDueDate = (element, newDate) => {
+		const titleDiv = element.querySelector('.due-date > span');
+		const dateStr = formatDate(newDate);
+		titleDiv.innerText = dateStr;
+	}
+
+	const setChecklist = (element, checklist) => {
+		const orderedList = element.querySelector("ol");
+		removeAllChildren(orderedList);
+		const items = checklist.split(",");
+		items.forEach((i) => {
+			const li = document.createElement("li");
+			li.innerText = i;
+			orderedList.appendChild(li);
+		});
+	}
+
+	const removeAllChildren = (element) => {
+		while (element.lastElementChild) {
+			element.removeChild(element.lastElementChild);
+		}
+	}
+
+	const setCardDescription = (element, newDescription) => {
+		const description = element.querySelector(".todo-description");
+		description.innerText = newDescription;
+	}
+
+	const setCardNotes = (element, newNotes) => {
+		const notes = element.querySelector(".todo-notes");
+		notes.innerText = newNotes;
+	}
+
 	PubSub.subscribe("projectCreated", createProjectDiv);
+	PubSub.subscribe("editCard", editCard);
 
 	activateNewToDoButton();
 	activateDialogClose();

@@ -78,12 +78,18 @@ const todoProject = (function() {
 	const editTodo = (_msg, pubData) => {
 		const todosArr = todoProject.projects[pubData.projectId].todos;
 		const indx = todosArr.findIndex((i) => {
-			i.id === pubData.todoId;
+			return i.id === pubData.todoId;
 		});
-		const todo = newTodoFromForm(pubData.formData);
-		console.log("todo from edited data");
-		console.log(todo);
-		todosArr[indx] = todo;
+		const todo = editTodoObject(todosArr[indx], pubData.formData);
+		PubSub.publish("editCard", todo);
+	}
+
+	const editTodoObject = (todo, formData) => {
+		for (let field in formData) {
+			todo[field] = formData[field];
+		}
+
+		return todo;
 	}
 
 	const removeTodo = (_msg, pubData) => {

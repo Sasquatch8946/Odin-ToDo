@@ -28,3 +28,6 @@
 [x] Make edit form close button work. Use closest method in event listener.
 [] Create pubsub to modify todo card after submitting edit and changing the todo on the
    projects object.
+   Making a mistake: every time I edit a todo, I replace it with a todo with identical content but a different id.
+[] Make checklist input a series of text fields, the number of which can be increased by clicking a button.
+[] Fix bug where submitting a todo edit will decrement the date by one day if the date isn't modified.
