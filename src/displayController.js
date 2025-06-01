@@ -131,6 +131,7 @@ export const displayController = (function () {
 		projectTitle.innerText = project.name;
 		projectTitle.tabIndex = "0";
 		makeProjectEditable(projectTitle);
+		populateTodosOnClick(projectTitle);
 		container.appendChild(projectTitle);
 		projectTitle.dataset.id = project.id;
 		projectTitle.focus();
@@ -259,14 +260,27 @@ export const displayController = (function () {
 		} else {
 			createProjectContainer();
 		}
+
+		const defaultId = getDefaultProjectId();
+		createTodoSubSection(defaultId);
 		for (let project in projects) {
 			displayController.createProjectDiv(null, projects[project]);
 			projects[project].todos.forEach((t) => {
-				createTodoSubSection(projects[project].id);
 				createTodoCard(null, t);
 			});
 		}
 
+	}
+
+	const getDefaultProjectId = () => {
+		const projects = todoProject.projects;
+		let projectId;
+		for (let project in projects) {
+			projectId = projects[project].id;
+			break;
+		}
+
+		return projectId;
 	}
 
 	const clearProjects = () => {
@@ -407,6 +421,37 @@ export const displayController = (function () {
 	const setCardNotes = (element, newNotes) => {
 		const notes = element.querySelector(".todo-notes");
 		notes.innerText = newNotes;
+	}
+
+	const populateTodosOnClick = (projectDiv) => {
+		const projectId = projectDiv.dataset.id;
+		projectDiv.addEventListener("click", () => {
+			clearTodos();
+			setActiveProject(projectId);
+			populateTodos(projectId);
+
+		});
+
+	}
+
+	const setActiveProject = (projectId) => {
+		const todoSection = document.querySelector('.todo-section');
+		todoSection.dataset.id = projectId;
+	}
+
+	const clearTodos = () => {
+		const todos = document.querySelector('.todos');
+		removeAllChildren(todos);
+	}
+
+	const populateTodos = (projectId) => {
+		if (todoProject.projects[projectId].todos.Length > 0) {
+			Array.from(todoProject.projects[projectId].todos).forEach((t) => {
+				createTodoCard(null, t);
+			});
+		} else {
+			console.log("project has no todos");
+		}
 	}
 
 	PubSub.subscribe("projectCreated", createProjectDiv);
