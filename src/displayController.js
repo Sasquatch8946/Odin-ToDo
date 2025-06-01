@@ -424,8 +424,8 @@ export const displayController = (function () {
 	}
 
 	const populateTodosOnClick = (projectDiv) => {
-		const projectId = projectDiv.dataset.id;
 		projectDiv.addEventListener("click", () => {
+			const projectId = projectDiv.dataset.id;
 			clearTodos();
 			setActiveProject(projectId);
 			populateTodos(projectId);
@@ -436,7 +436,7 @@ export const displayController = (function () {
 
 	const setActiveProject = (projectId) => {
 		const todoSection = document.querySelector('.todo-section');
-		todoSection.dataset.id = projectId;
+		todoSection.dataset.project = projectId;
 	}
 
 	const clearTodos = () => {
@@ -445,8 +445,8 @@ export const displayController = (function () {
 	}
 
 	const populateTodos = (projectId) => {
-		if (todoProject.projects[projectId].todos.Length > 0) {
-			Array.from(todoProject.projects[projectId].todos).forEach((t) => {
+		if (todoProject.projects[projectId].todos.length > 0) {
+			todoProject.projects[projectId].todos.forEach((t) => {
 				createTodoCard(null, t);
 			});
 		} else {
