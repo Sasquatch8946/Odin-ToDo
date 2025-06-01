@@ -78,6 +78,17 @@ const todoProject = (function() {
 		const todo = newTodoFromForm(pubData.formData);
 		todoProject.projects[projectId].todos.push(todo);	
 		PubSub.publish("newTodo.addCard", todo);
+		PubSub.publish("persistTodo", {projectId, todo})
+	}
+
+	const getProjectsFromStorage = () => {
+		return JSON.parse(localStorage.getItem("projects"));
+	}
+
+	const persistTodo = (_msg, pubData) => {
+		const projects = getProjectsFromStorage();
+		projects[pubData.projectId].todos.push(pubData.todo);
+		commitProjectsToStorage(projects);
 	}
 
 	const newTodoFromForm = (formData) => {
@@ -90,6 +101,10 @@ const todoProject = (function() {
 			formData.notes
 		)
 
+	}
+
+	const commitProjectsToStorage = (projects) => {
+		localStorage.setItem("projects", JSON.stringify(projects));	
 	}
 
 	const editTodo = (_msg, pubData) => {
@@ -130,6 +145,12 @@ const todoProject = (function() {
 		PubSub.publish("projectCreated", proj);
 	}
 
+	const persistProj = (_msg, proj) => {
+		const projects = JSON.parse(localStorage.getItem("projects"));
+		projects[proj.id] = proj;
+		localStorage.setItem("projects", JSON.stringify(projects));
+	}
+
 
 	PubSub.subscribe("newTodo.formSubmission", addTodo);
 
@@ -140,6 +161,10 @@ const todoProject = (function() {
 	PubSub.subscribe("removeTodo", removeTodo);
 
 	PubSub.subscribe("todoEdit", editTodo);
+
+	PubSub.subscribe("projectCreated", persistProj);
+
+	PubSub.subscribe("persistTodo", persistTodo);
 
 	return {
 		projects,
