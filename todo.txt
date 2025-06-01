@@ -31,3 +31,6 @@
    Making a mistake: every time I edit a todo, I replace it with a todo with identical content but a different id.
 [] Make checklist input a series of text fields, the number of which can be increased by clicking a button.
 [] Fix bug where submitting a todo edit will decrement the date by one day if the date isn't modified.
+[] Use Object.assign to add methods back to objects retreived from local storage.
+   (Currently my objects do not have methods.)
+[] Add object methods to ToDo. Could probably be useful for when edits are made.

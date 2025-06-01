@@ -16,6 +16,10 @@ class ToDo {
 		this.notes = notes;
 		this.id = crypto.randomUUID()
 	}
+
+	sayHello() {
+		console.log("hello world!");
+	}
 }
 
 class Project {
@@ -29,11 +33,8 @@ class Project {
 }
 
 const todoProject = (function() {
+
 	let projects = {};
-
-	const today = new Project("Today");
-
-	projects[today.id] = today;
 
 	const addProject = (_msg, data) => {
 		projects[data.id] = data;
@@ -47,11 +48,27 @@ const todoProject = (function() {
 		"move the furniture, sweep, wetjet",
 		"be thorough");
 
-	projects[today.id].todos.push(myToDo);
 
-	console.log("PROJECTS");
+	
+	if (!localStorage) {
 
-	console.log(projects);
+
+		const today = new Project("Today");
+
+		projects[today.id] = today;
+
+
+		projects[today.id].todos.push(myToDo);
+
+		const projectsJSON = JSON.stringify(projects);
+
+		localStorage.setItem("projects", projectsJSON);
+
+	} else {
+		projects = JSON.parse(localStorage.getItem("projects"));
+	}
+
+
 	
 	PubSub.subscribe("newProject", addProject);
 
