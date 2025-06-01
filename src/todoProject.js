@@ -58,24 +58,32 @@ const todoProject = (function() {
 
 	const addTodo = (_msg, pubData) => {
 		const projectId = pubData.project;
-		const todo = new ToDo(
-			pubData.formData.title,
-			pubData.formData.description,
-			pubData.formData.dueDate,
-			pubData.formData.priority,
-			pubData.formData.checklist,
-			pubData.formData.notes
-		)
+		const todo = newTodoFromForm(pubData.formData);
 		todoProject.projects[projectId].todos.push(todo);	
 		PubSub.publish("newTodo.addCard", todo);
 	}
 
+	const newTodoFromForm = (formData) => {
+		return new ToDo(
+			formData.title,
+			formData.description,
+			formData.dueDate,
+			formData.priority,
+			formData.checklist,
+			formData.notes
+		)
+
+	}
+
 	const editTodo = (_msg, pubData) => {
-		const todosArr = todoProject.project[pubData.projectId].todos;
+		const todosArr = todoProject.projects[pubData.projectId].todos;
 		const indx = todosArr.findIndex((i) => {
 			i.id === pubData.todoId;
 		});
-		todosArr[indx] = pubData.todo;
+		const todo = newTodoFromForm(pubData.formData);
+		console.log("todo from edited data");
+		console.log(todo);
+		todosArr[indx] = todo;
 	}
 
 	const removeTodo = (_msg, pubData) => {
@@ -107,6 +115,8 @@ const todoProject = (function() {
 	PubSub.subscribe("newProjectButtonClicked", createProject);
 
 	PubSub.subscribe("removeTodo", removeTodo);
+
+	PubSub.subscribe("todoEdit", editTodo);
 
 	return {
 		projects,

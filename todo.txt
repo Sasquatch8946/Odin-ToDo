@@ -25,3 +25,6 @@
    of the project.
 [] Modify form submission so the creation of the Todo object occurs in the todoProject
    module instead of the displayController.
+[x] Make edit form close button work. Use closest method in event listener.
+[] Create pubsub to modify todo card after submitting edit and changing the todo on the
+   projects object.

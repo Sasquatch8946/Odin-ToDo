@@ -17,9 +17,13 @@ export const displayController = (function () {
 	}
 
 	const activateDialogClose = () => {
-		const closeBtn = document.querySelector("dialog button");
-		closeBtn.addEventListener("click", () => {
-			dialog.close();
+		const closeBtns = Array.from(document.querySelectorAll("dialog button"));
+		closeBtns.forEach((closeBtn) => {
+			closeBtn.addEventListener("click", (e) => {
+				const dialog = e.target.closest("dialog");
+				e.preventDefault();
+				dialog.close();
+			});
 		});
 	}
 
@@ -38,19 +42,6 @@ export const displayController = (function () {
 		const sel = window.getSelection();
 		sel.selectAllChildren(btn);
 		sel.collapseToEnd();
-	}
-
-	const activateEditBtn = (element) => {
-		element.addEventListener("click", (e) => {
-			console.log("edit button clicked");
-			makeEditable(e.target.parentNode.parentNode);
-			makeEditable(e.target.parentNode.parentNode.previousSibling);
-/*			const s = getSiblingElements(e.target);
-			console.log(s);
-			s.forEach((el) => {
-				makeEditable(el);
-			});*/
-		});
 	}
 
 	const activateDelBtn = (element) => {
@@ -115,15 +106,10 @@ export const displayController = (function () {
 	}
 
 	const activateEditSubmit = () => {
-		const f = document.querySelector("dialog.todo-form.edit-form form");
-		f.addEventListener("submit", (event) => {
-			event.preventDefault();
-		});
+		const f = getEditForm();
+		f.addEventListener("submit", submitEdit);
 	}
 
-	activateNewToDoButton();
-	activateDialogClose();
-	activateNewProjBtn();
 
 	const priorityColorCode = {
 		high: "red",
@@ -328,18 +314,37 @@ export const displayController = (function () {
 			const form = document.querySelector("form");
 			e.preventDefault();
 			const formData = getFormData(form);
-			const project = document.querySelector('.todo-section').dataset.project;
+			const project = getProjectId();
 			const pubData = { project, formData };
 			PubSub.publish("newTodo.formSubmission", pubData);
 			clearForm();
-		}
+	}
+
+	const submitEdit = (e) => {
+			e.preventDefault();
+			const form = getEditForm();
+			const todoId = getEditDialog().todoId;
+			const formData = getFormData(form);
+			const projectId = getProjectId();
+			const pubData = { projectId, formData, todoId };
+			PubSub.publish("todoEdit", pubData);
+			clearForm();
+	}
+
+	const getEditForm = () => {
+		return document.querySelector("dialog.todo-form.edit-form form");
+
+	}
 
 	const activateFormSubmit = () => {
 		const form = document.querySelector("form");
 		form.addEventListener("submit", submitForm);
 	}
 
-	activateFormSubmit();	
+	const getEditDialog = () => {
+		return document.querySelector("dialog.todo-form.edit-form");
+	}
+
 
 	const clearForm = () => {
 		const inputs = document.querySelectorAll("form input");
@@ -355,6 +360,12 @@ export const displayController = (function () {
 	}
 
 	PubSub.subscribe("projectCreated", createProjectDiv);
+
+	activateNewToDoButton();
+	activateDialogClose();
+	activateNewProjBtn();
+	activateEditSubmit();
+	activateFormSubmit();	
 
 	return {
 		createProjectDiv,
