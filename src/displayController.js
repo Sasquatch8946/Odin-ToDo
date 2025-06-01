@@ -361,7 +361,6 @@ export const displayController = (function () {
 	}
 
 	const editCard = (_msg, todo) => {
-		const projectId = getProjectId();
 		const todoId = todo.id;
 		const todoCard = document.querySelector(`div.todo-card[data-id='${todoId}']`);
 		setCardTitle(todoCard, todo.title);
@@ -369,6 +368,7 @@ export const displayController = (function () {
 		setChecklist(todoCard, todo.checklist);
 		setCardDescription(todoCard, todo.description);
 		setCardNotes(todoCard, todo.notes);
+		setPriorityHighlight(todo, todoCard);
 	}
 
 	const setCardTitle = (element, newTitle) => {
