@@ -1,4 +1,4 @@
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import { todoProject, ToDo } from './todoProject.js';
 const PubSub = require('pubsub-js');
 import editImage from './file-edit.svg';
@@ -90,8 +90,7 @@ export const displayController = (function () {
 		inputs.forEach((i) => {
 			var prop = i.name;
 			if (i.name === "dueDate") {
-				const d = new Date(todoObj[prop]);
-				const dateStr = format(d, "yyyy-MM-dd");
+				const dateStr = format(parseISO(todoObj[prop]), "yyyy-MM-dd");
 				i.value = dateStr;
 			} else {
 				i.value = todoObj[prop];
@@ -371,7 +370,7 @@ export const displayController = (function () {
 	}
 
 	const formatDate = (date) => {
-		return format(date, "M/dd/yyyy");
+		return format(parseISO(date), "M/dd/yyyy");
 	}
 
 	const editCard = (_msg, todo) => {

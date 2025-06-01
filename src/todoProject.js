@@ -43,14 +43,14 @@ const todoProject = (function() {
 
 	let myToDo = new ToDo("Clean the floors",
 		"Sweep and wetjet the floors in the kitchen, living room, and entryway.",
-		"5-15-2025",
+		"2025-05-15",
 		"high",
 		"move the furniture, sweep, wetjet",
 		"be thorough");
 
 
 	
-	if (!localStorage) {
+	if (!localStorage.length > 0) {
 
 
 		const today = new Project("Today");
