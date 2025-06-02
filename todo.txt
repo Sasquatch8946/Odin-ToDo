@@ -6,7 +6,7 @@
 [x] Add an edit button to the hiddenContent of each todo.
 [x] Fix New Project button so it correctly makes the project key and id property identical
    and also allows user to change the name of the project.
-[] Give edit button functionality. Probably need to add a 'complete' button to signal the
+[x] Give edit button functionality. Probably need to add a 'complete' button to signal the
    end of changes.
 [x] Allow edit button to be clicked without minimizing the card. Attach event listener to div.title,
     i.e. previous sibling. Edit toggleContentVisibility to target the expandable content via
@@ -38,8 +38,8 @@
    Had to use parseISO and put the dueDate of the default todo in the same format as the
    pre-filled values for the edit form.
 [x] Make deleting todo card modify the project's todos in the localStorage.
-[] Make the default project have focus() regardless of whether there are additional
+[x] Make the default project have focus() regardless of whether there are additional
    projects saved.
-[] Fix bug where refreshing the page leads to todos from all projects being displayed.
+[x] Fix bug where refreshing the page leads to todos from all projects being displayed.
    Once I click on a particular project, this is fixed, but only the default projects todos
    should display.
