@@ -67,7 +67,6 @@ export const displayController = (function () {
 	const makeProjectEditable = (projectDiv) => {
 		projectDiv.addEventListener("dblclick", enableEditOnDblClick);
 		projectDiv.addEventListener("blur", (e) => {
-			console.log("project button lost focus");
 			if (e.target.contentEditable === "true") {
 				makeEditable(e.target);
 			}

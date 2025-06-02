@@ -1,38 +1,57 @@
 const PubSub = require('pubsub-js');
 
-class ToDo {
-	constructor(title,
-		description,
-		dueDate,
-		priority,
-		checklist,
-		notes
-	) {
-		this.title = title;
-		this.description = description;
-		this.dueDate = dueDate;
-		this.priority = priority;
-		this.checklist = checklist;
-		this.notes = notes;
-		this.id = crypto.randomUUID()
-	}
 
-	sayHello() {
-		console.log("hello world!");
-	}
-}
-
-class Project {
-	constructor(
-		projectName,
-	) {
-		this.name = projectName;
-		this.todos = [];
-		this.id = crypto.randomUUID();
-	}
-}
 
 const todoProject = (function() {
+
+	class ToDo {
+		constructor(title,
+			description,
+			dueDate,
+			priority,
+			checklist,
+			notes
+		) {
+			this.title = title;
+			this.description = description;
+			this.dueDate = dueDate;
+			this.priority = priority;
+			this.checklist = checklist;
+			this.notes = notes;
+			this.id = crypto.randomUUID()
+		}
+
+		edit = editTodoObject;
+	}
+
+	class Project {
+		constructor(
+			projectName,
+		) {
+			this.name = projectName;
+			this.todos = [];
+			this.id = crypto.randomUUID();
+		}
+
+		getTodo = getTodoFromProject;
+	}
+
+	const getTodoFromProject = function (pubData) {
+		const indx = this.todos.findIndex((i) => {
+			return i.id === pubData.todoId;
+		});
+
+		return this.todos[indx];
+
+	}
+
+	const editTodoObject = function (formData) {
+		for (let field in formData) {
+			this[field] = formData[field];
+		}
+
+		return this;
+	}
 
 	let projects = {};
 
@@ -66,6 +85,14 @@ const todoProject = (function() {
 
 	} else {
 		projects = JSON.parse(localStorage.getItem("projects"));
+		for (let project in projects) {
+			projects[project].getTodo = getTodoFromProject;
+			console.log(projects[project]);
+			for (let i = 0; i < projects[project].todos.length; i++) {
+				projects[project].todos[i].edit = editTodoObject;
+				console.log(projects[project].todos[i]);
+			}
+		}
 	}
 
 
@@ -108,29 +135,14 @@ const todoProject = (function() {
 	}
 
 	const editTodo = (_msg, pubData) => {
-		const todo = getTodoFromProject(pubData);
-		const editedTodo = editTodoObject(todo, pubData.formData);
+		console.log(projects[pubData.projectId]);
+		const todo = todoProject.projects[pubData.projectId].getTodo(pubData);
+		const editedTodo = todo.edit(pubData.formData);
 		commitProjectsToStorage();
 		PubSub.publish("editCard", editedTodo);
 	}
 
-	const editTodoObject = (todo, formData) => {
-		for (let field in formData) {
-			todo[field] = formData[field];
-		}
 
-		return todo;
-	}
-
-	const getTodoFromProject = (pubData) => {
-		const todosArr = todoProject.projects[pubData.projectId].todos;
-		const indx = todosArr.findIndex((i) => {
-			return i.id === pubData.todoId;
-		});
-
-		return todosArr[indx];
-
-	}
 
 	const removeTodo = (_msg, pubData) => {
 		const projectId = pubData.projectId;
@@ -181,4 +193,4 @@ const todoProject = (function() {
 	}
 })();
 
-export { ToDo, Project, todoProject };
+export { todoProject };
