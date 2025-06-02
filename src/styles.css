@@ -51,7 +51,7 @@
 }
 
 .project-title:focus {
-    background-color: firebrick;
+    border: 2px solid black;
 }
 
 .sidebar {

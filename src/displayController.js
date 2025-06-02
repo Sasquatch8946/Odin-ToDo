@@ -135,7 +135,6 @@ export const displayController = (function () {
 		populateTodosOnClick(projectTitle);
 		container.appendChild(projectTitle);
 		projectTitle.dataset.id = project.id;
-		projectTitle.focus();
 	}
 
 	const createTodoCard = (_msg, todo) => {
@@ -265,11 +264,13 @@ export const displayController = (function () {
 		const defaultId = getDefaultProjectId();
 		createTodoSubSection(defaultId);
 		for (let project in projects) {
-			displayController.createProjectDiv(null, projects[project]);
-			projects[project].todos.forEach((t) => {
-				createTodoCard(null, t);
-			});
+			createProjectDiv(null, projects[project]);
 		}
+		focusDefaultProject(defaultId);
+		projects[defaultId].todos.forEach((t) => {
+			createTodoCard(null, t);
+		});
+		
 
 	}
 
@@ -425,8 +426,8 @@ export const displayController = (function () {
 	}
 
 	const populateTodosOnClick = (projectDiv) => {
-		projectDiv.addEventListener("click", () => {
-			const projectId = projectDiv.dataset.id;
+		projectDiv.addEventListener("click", (e) => {
+			const projectId = e.target.dataset.id;
 			clearTodos();
 			setActiveProject(projectId);
 			populateTodos(projectId);
@@ -453,6 +454,11 @@ export const displayController = (function () {
 		} else {
 			console.log("project has no todos");
 		}
+	}
+
+	const focusDefaultProject = (projectId) => {
+		const defaultProjectDiv = document.querySelector(`div.project-title[data-id='${projectId}']`);
+		defaultProjectDiv.focus();
 	}
 
 	PubSub.subscribe("projectCreated", createProjectDiv);
