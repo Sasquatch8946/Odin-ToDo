@@ -88,7 +88,7 @@ const todoProject = (function() {
 	const persistTodo = (_msg, pubData) => {
 		const projects = getProjectsFromStorage();
 		projects[pubData.projectId].todos.push(pubData.todo);
-		commitProjectsToStorage(projects);
+		commitProjectsToStorage();
 	}
 
 	const newTodoFromForm = (formData) => {
@@ -103,14 +103,14 @@ const todoProject = (function() {
 
 	}
 
-	const commitProjectsToStorage = (projects) => {
-		localStorage.setItem("projects", JSON.stringify(projects));	
+	const commitProjectsToStorage = () => {
+		localStorage.setItem("projects", JSON.stringify(todoProject.projects));	
 	}
 
 	const editTodo = (_msg, pubData) => {
 		const todo = getTodoFromProject(pubData);
 		const editedTodo = editTodoObject(todo, pubData.formData);
-		commitProjectsToStorage(todoProject.projects);
+		commitProjectsToStorage();
 		PubSub.publish("editCard", editedTodo);
 	}
 
@@ -136,9 +136,11 @@ const todoProject = (function() {
 		const projectId = pubData.projectId;
 		const todoId = pubData.todoId;
 		const newTodoArr = todoProject.projects[projectId].todos.filter((t) => {
-			t.id !== todoId;
+			return t.id !== todoId;
 		});
 		todoProject.projects[projectId].todos = newTodoArr;
+		console.log(todoProject.projects[projectId].todos);
+		commitProjectsToStorage();
 		console.log(todoProject.projects[projectId]);
 	}
 
@@ -159,23 +161,6 @@ const todoProject = (function() {
 		localStorage.setItem("projects", JSON.stringify(projects));
 	}
 
-	const removeTodoFromStorage = (_msg, pubData) => {
-		const projects = getProjectsFromStorage();
-		const newProjects = removeTodoFromProjects(projects, pubData);
-		commitProjectsToStorage(newProjects);
-	}
-
-	const removeTodoFromProjects = (projects, pubData) => {
-		const projectId = pubData.projectId;
-		const todoId = pubData.todoId;		
-		const newTodoArr = projects[projectId].todos.filter((t) => {
-			return t.id !== todoId;
-		});
-		projects[projectId].todos = newTodoArr;
-
-		return projects;
-	}
-
 	PubSub.subscribe("newTodo.formSubmission", addTodo);
 
 	PubSub.subscribe("projectNameChange", setProjectName);
@@ -183,8 +168,6 @@ const todoProject = (function() {
 	PubSub.subscribe("newProjectButtonClicked", createProject);
 
 	PubSub.subscribe("removeTodo", removeTodo);
-
-	PubSub.subscribe("removeTodo", removeTodoFromStorage);
 
 	PubSub.subscribe("todoEdit", editTodo);
 
