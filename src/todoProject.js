@@ -108,12 +108,10 @@ const todoProject = (function() {
 	}
 
 	const editTodo = (_msg, pubData) => {
-		const todosArr = todoProject.projects[pubData.projectId].todos;
-		const indx = todosArr.findIndex((i) => {
-			return i.id === pubData.todoId;
-		});
-		const todo = editTodoObject(todosArr[indx], pubData.formData);
-		PubSub.publish("editCard", todo);
+		const todo = getTodoFromProject(pubData);
+		const editedTodo = editTodoObject(todo, pubData.formData);
+		commitProjectsToStorage(todoProject.projects);
+		PubSub.publish("editCard", editedTodo);
 	}
 
 	const editTodoObject = (todo, formData) => {
@@ -122,6 +120,16 @@ const todoProject = (function() {
 		}
 
 		return todo;
+	}
+
+	const getTodoFromProject = (pubData) => {
+		const todosArr = todoProject.projects[pubData.projectId].todos;
+		const indx = todosArr.findIndex((i) => {
+			return i.id === pubData.todoId;
+		});
+
+		return todosArr[indx];
+
 	}
 
 	const removeTodo = (_msg, pubData) => {
@@ -146,11 +154,27 @@ const todoProject = (function() {
 	}
 
 	const persistProj = (_msg, proj) => {
-		const projects = JSON.parse(localStorage.getItem("projects"));
+		const projects = getProjectsFromStorage();
 		projects[proj.id] = proj;
 		localStorage.setItem("projects", JSON.stringify(projects));
 	}
 
+	const removeTodoFromStorage = (_msg, pubData) => {
+		const projects = getProjectsFromStorage();
+		const newProjects = removeTodoFromProjects(projects, pubData);
+		commitProjectsToStorage(newProjects);
+	}
+
+	const removeTodoFromProjects = (projects, pubData) => {
+		const projectId = pubData.projectId;
+		const todoId = pubData.todoId;		
+		const newTodoArr = projects[projectId].todos.filter((t) => {
+			return t.id !== todoId;
+		});
+		projects[projectId].todos = newTodoArr;
+
+		return projects;
+	}
 
 	PubSub.subscribe("newTodo.formSubmission", addTodo);
 
@@ -159,6 +183,8 @@ const todoProject = (function() {
 	PubSub.subscribe("newProjectButtonClicked", createProject);
 
 	PubSub.subscribe("removeTodo", removeTodo);
+
+	PubSub.subscribe("removeTodo", removeTodoFromStorage);
 
 	PubSub.subscribe("todoEdit", editTodo);
 

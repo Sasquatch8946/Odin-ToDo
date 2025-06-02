@@ -34,7 +34,7 @@
 [] Use Object.assign to add methods back to objects retreived from local storage.
    (Currently my objects do not have methods.)
 [] Add object methods to ToDo. Could probably be useful for when edits are made.
-[] Review:
+[x] Review:
    https://www.google.com/search?client=ubuntu&channel=fs&q=js+date-fns+format+decrements+the+day+by+one
    Needed parseISO method. Edits don't decrement the time but the original timestamp appears
    to be decremented by one day...   
@@ -43,3 +43,6 @@
 
    Had to use parseISO and put the dueDate of the default todo in the same format as the
    pre-filled values for the edit form.
+[] Make deleting todo card modify the project's todos in the localStorage.
+[] Make the default project have focus() regardless of whether there are additional
+   projects saved.

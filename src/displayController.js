@@ -86,7 +86,9 @@ export const displayController = (function () {
 		dialog.dataset.todoId = todoId;
 		dialog.dataset.projectId = projectId;
 		const inputs = Array.from(document.querySelectorAll(".todo-form.edit-form .form-row input"));
-		const todoObj = todoProject.projects[projectId].todos.filter((t) => t.id === todoId)[0];
+		const todoObj = todoProject.projects[projectId].todos.filter((t) => {
+			return t.id === todoId;
+		})[0];
 		inputs.forEach((i) => {
 			var prop = i.name;
 			if (i.name === "dueDate") {
