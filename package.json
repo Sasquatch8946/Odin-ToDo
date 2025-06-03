@@ -10,7 +10,7 @@
     "ghpages-commit": "git add dist -f && git commit -m 'Deployment commit'",
     "ghpages-push": "git subtree push --prefix -f dist origin gh-pages",
     "ghpages-finish": "git checkout main",
-    "ghpages": "npm run ghpages-create && npm run ghpages-commit && npm run ghpages-push && npm run ghpages-finish"
+    "ghpages": "npm run build && npm run ghpages-create && npm run ghpages-commit && npm run ghpages-push && npm run ghpages-finish"
 
   },
   "keywords": [],

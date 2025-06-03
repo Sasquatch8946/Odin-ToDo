@@ -58,7 +58,6 @@ const todoProject = (function() {
 
 	const addProject = (_msg, data) => {
 		projects[data.id] = data;
-		console.log(projects);
 	}
 
 	const removeTodoFromObject = function (todoId) {
@@ -149,7 +148,6 @@ const todoProject = (function() {
 	}
 
 	const editTodo = (_msg, pubData) => {
-		console.log(projects[pubData.projectId]);
 		const todo = todoProject.projects[pubData.projectId].getTodo(pubData);
 		const editedTodo = todo.edit(pubData.formData);
 		commitProjectsToStorage();
@@ -163,14 +161,12 @@ const todoProject = (function() {
 		const todoId = pubData.todoId;
 		projects[projectId].removeTodoById(todoId);
 		commitProjectsToStorage();
-		console.log(todoProject.projects[projectId]);
 	}
 
 	
 
 	const setProjectName = (_msg, pubData) => {
 		projects[pubData.projectId].name = pubData.projectName;
-		console.log(projects);
 	}
 
 	const createProject = (_msg) => {
