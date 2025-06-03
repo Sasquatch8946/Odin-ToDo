@@ -30,7 +30,6 @@ export const displayController = (function () {
 	const activateNewProjBtn = () => {
 		const newProjBtn = document.querySelector('button.project');
 		newProjBtn.addEventListener("click", () => {
-			console.log("new project button clicked");
 			PubSub.publish("newProjectButtonClicked");
 		});
 	}
@@ -314,9 +313,7 @@ export const displayController = (function () {
 
 	const getFormData = (form) => {
 		const data = new FormData(form);
-		console.log(data.get("Todo name"));
 		const details = [...data.entries()];
-		console.log(details);
 		const title = details[0][1];
 		const dueDate = details[1][1];
 		const description = details[2][1];
@@ -450,9 +447,7 @@ export const displayController = (function () {
 			todoProject.projects[projectId].todos.forEach((t) => {
 				createTodoCard(null, t);
 			});
-		} else {
-			console.log("project has no todos");
-		}
+		} 
 	}
 
 	const focusDefaultProject = (projectId) => {
