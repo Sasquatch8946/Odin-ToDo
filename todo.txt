@@ -27,7 +27,7 @@
 [x] Fix bug where submitting a todo edit will decrement the date by one day if the date isn't modified.
 [] Use Object.assign to add methods back to objects retreived from local storage.
    (Currently my objects do not have methods.)
-[] Add object methods to ToDo. Could probably be useful for when edits are made.
+[x] Add object methods to ToDo. Could probably be useful for when edits are made.
 [x] Review:
    https://www.google.com/search?client=ubuntu&channel=fs&q=js+date-fns+format+decrements+the+day+by+one
    Needed parseISO method. Edits don't decrement the time but the original timestamp appears
@@ -43,3 +43,4 @@
 [x] Fix bug where refreshing the page leads to todos from all projects being displayed.
    Once I click on a particular project, this is fixed, but only the default projects todos
    should display.
+[] Re-create npm script to push to GH pages. Review relevant part of restaurant page lesson.
