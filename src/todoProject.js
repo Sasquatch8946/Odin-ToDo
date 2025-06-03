@@ -34,6 +34,7 @@ const todoProject = (function() {
 		}
 
 		getTodo = getTodoFromProject;
+		removeTodoById = removeTodoFromObject;
 	}
 
 	const getTodoFromProject = function (pubData) {
@@ -58,6 +59,21 @@ const todoProject = (function() {
 	const addProject = (_msg, data) => {
 		projects[data.id] = data;
 		console.log(projects);
+	}
+
+	const removeTodoFromObject = function (todoId) {
+		this.todos = this.todos.filter((t) => {
+			return t.id !== todoId;
+		});
+	}
+
+	const addProjectMethods = function (project) {
+		project.getTodo = getTodoFromProject;
+		project.removeTodoById = removeTodoFromObject;
+	}
+
+	const addTodoMethods = function (todo) {
+		todo.edit = editTodoObject;
 	}
 
 	let myToDo = new ToDo("Clean the floors",
@@ -86,11 +102,9 @@ const todoProject = (function() {
 	} else {
 		projects = JSON.parse(localStorage.getItem("projects"));
 		for (let project in projects) {
-			projects[project].getTodo = getTodoFromProject;
-			console.log(projects[project]);
+			addProjectMethods(projects[project]);
 			for (let i = 0; i < projects[project].todos.length; i++) {
-				projects[project].todos[i].edit = editTodoObject;
-				console.log(projects[project].todos[i]);
+				addTodoMethods(projects[project].todos[i]);
 			}
 		}
 	}
@@ -147,14 +161,12 @@ const todoProject = (function() {
 	const removeTodo = (_msg, pubData) => {
 		const projectId = pubData.projectId;
 		const todoId = pubData.todoId;
-		const newTodoArr = todoProject.projects[projectId].todos.filter((t) => {
-			return t.id !== todoId;
-		});
-		todoProject.projects[projectId].todos = newTodoArr;
-		console.log(todoProject.projects[projectId].todos);
+		projects[projectId].removeTodoById(todoId);
 		commitProjectsToStorage();
 		console.log(todoProject.projects[projectId]);
 	}
+
+	
 
 	const setProjectName = (_msg, pubData) => {
 		projects[pubData.projectId].name = pubData.projectName;
