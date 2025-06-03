@@ -205,4 +205,4 @@ const todoProject = (function() {
 	}
 })();
 
-export { todoProject };
+export const projects = todoProject.projects;

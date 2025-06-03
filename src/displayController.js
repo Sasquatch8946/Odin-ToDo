@@ -1,5 +1,5 @@
 import { format, parseISO } from 'date-fns';
-import { todoProject, ToDo } from './todoProject.js';
+import { projects } from './todoProject.js';
 const PubSub = require('pubsub-js');
 import editImage from './file-edit.svg';
 import delImage from './delete.svg';
@@ -84,7 +84,7 @@ export const displayController = (function () {
 		dialog.dataset.todoId = todoId;
 		dialog.dataset.projectId = projectId;
 		const inputs = Array.from(document.querySelectorAll(".todo-form.edit-form .form-row input"));
-		const todoObj = todoProject.projects[projectId].todos.filter((t) => {
+		const todoObj = projects[projectId].todos.filter((t) => {
 			return t.id === todoId;
 		})[0];
 		inputs.forEach((i) => {
@@ -251,7 +251,6 @@ export const displayController = (function () {
 	}
 
 	const populateProjects = () => {
-		const projects = todoProject.projects;
 		if (getProjectContainer()) {
 			clearProjects();
 			createProjectContainer();
@@ -273,7 +272,6 @@ export const displayController = (function () {
 	}
 
 	const getDefaultProjectId = () => {
-		const projects = todoProject.projects;
 		let projectId;
 		for (let project in projects) {
 			projectId = projects[project].id;
@@ -443,8 +441,8 @@ export const displayController = (function () {
 	}
 
 	const populateTodos = (projectId) => {
-		if (todoProject.projects[projectId].todos.length > 0) {
-			todoProject.projects[projectId].todos.forEach((t) => {
+		if (projects[projectId].todos.length > 0) {
+			projects[projectId].todos.forEach((t) => {
 				createTodoCard(null, t);
 			});
 		} 
